@@ -1,0 +1,16 @@
+{namespace docs=TYPO3\Docs\ViewHelpers}
+<f:layout name="Default" />
+
+<f:section name="Title">Stats</f:section>
+
+<f:section name="Content">
+	<p>
+		<pre>
+Jobs in the queue: {stats.current-jobs-ready}
+Jobs delayed: {stats.current-jobs-delayed}
+Total jobs done: {stats.total-jobs}
+Uptime: {stats.uptime} sec (<docs:upTime>{stats.uptime}</docs:upTime> days)
+Number of tube: {stats.current-tubes}
+		</pre>
+	</p>
+</f:section>
