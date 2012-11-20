@@ -16,6 +16,18 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 
 	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Build\Domain\Repository\TerPackageRepository
+	 */
+	protected $terPackageRepository;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Build\Domain\Repository\GitPackageRepository
+	 */
+	protected $gitPackageRepository;
+
+	/**
 	 * Finds documents belonging to the TER given a status
 	 *
 	 * @param string $status the status of the document
@@ -78,6 +90,20 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	public function exist($uri) {
 		$document = $this->findOneByUri($uri);
 		return $document instanceof \TYPO3\Docs\Domain\Model\Document;
+	}
+
+	/**
+	 * Count the number of documents that would be processed
+	 *
+	 * @param string $repositoryType a repository type which can be git, ter, ...
+	 * @return int
+	 */
+	public function countDocumentToProcess($repositoryType) {
+		$packageRepository = sprintf('%sPackageRepository', $repositoryType);
+		$numberOfPackagesWithVersions = $this->$packageRepository->countAllWithVersions();
+		$numberOfDocuments = $this->countByRepositoryType($repositoryType);
+
+		return $numberOfPackagesWithVersions - $numberOfDocuments;
 	}
 
 }
