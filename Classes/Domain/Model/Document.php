@@ -22,7 +22,7 @@ class Document {
 	 * @var string
 	 * @FLOW3\Validate(type="NotEmpty")
 	 * @FLOW3\Validate(type="StringLength", options={ "minimum"=3, "maximum"=150 })
-	 * @ORM\Column(length=150)
+	 * @ORM\Column(length=255)
 	 */
 	protected $title = '';
 
@@ -55,17 +55,11 @@ class Document {
 	protected $version = '';
 
 	/**
-	 * Status code of the document. Possible values are:
-	 * ok                = document is correctly rendered
-	 * ok-with-warnings  = document generation has generated warnings
-	 * error-parsing     = documentation was not parsed correctly
-	 * no-documentation  = document needs to be rendered
-	 * to-render         = document needs to be rendered
-	 * undefined         = undefined status
+	 * Status code of the document.
 	 *
 	 * @var string
 	 * @FLOW3\Validate(type="NotEmpty")
-	 * @ORM\Column(length=30)
+	 * @ORM\Column(length=50, columnDefinition="ENUM('ok', 'documentation-not-found', 'ok-with-warnings', 'error-parsing', 'waiting-rendering', 'waiting-sync')")
 	 */
 	protected $status = '';
 
@@ -116,6 +110,15 @@ class Document {
 	 * @ORM\Column(length=255, unique=true)
 	 */
 	protected $uri = '';
+
+	/**
+	 * URI at which the document is also available
+	 *
+	 * @var string
+	 * @FLOW3\Validate(type="StringLength", options={ "maximum"=255 })
+	 * @ORM\Column(length=255)
+	 */
+	protected $uriAlias = '';
 
 	/**
 	 * The source URI where the package comes from.
@@ -495,6 +498,20 @@ class Document {
 	 */
 	public function setPackageFile($packageFile) {
 		$this->packageFile = $packageFile;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getUriAlias() {
+		return $this->uriAlias;
+	}
+
+	/**
+	 * @param string $uriAlias
+	 */
+	public function setUriAlias($uriAlias) {
+		$this->uriAlias = $uriAlias;
 	}
 }
 
