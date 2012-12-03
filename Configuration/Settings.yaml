@@ -37,5 +37,5 @@ TYPO3:
         className: 'TYPO3\Queue\Beanstalkd\BeanstalkdQueue'
       ter:
         className: 'TYPO3\Queue\Beanstalkd\BeanstalkdQueue'
-      zip:
+      sync:
         className: 'TYPO3\Queue\Beanstalkd\BeanstalkdQueue'

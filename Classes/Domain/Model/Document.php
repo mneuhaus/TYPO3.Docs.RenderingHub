@@ -173,6 +173,12 @@ class Document {
 	protected $categories;
 
 	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
+	 */
+	protected $documentRepository;
+
+	/**
 	 * Sets the abstract
 	 *
 	 * @param string $abstract
@@ -512,6 +518,25 @@ class Document {
 	 */
 	public function setUriAlias($uriAlias) {
 		$this->uriAlias = $uriAlias;
+	}
+
+	/**
+	 * @return \TYPO3\Docs\Build\Domain\Model\Package
+	 */
+	public function toPackage() {
+		$package = new \TYPO3\Docs\Build\Domain\Model\Package();
+
+		$ref = new \ReflectionObject($package);
+		$properties = $ref->getProperties();
+		foreach ($properties as $property) {
+			$property = $property->getName();
+			$setter = 'set' . ucfirst($property);
+			$getter = 'get' . ucfirst($property);
+
+			$value = call_user_func(array($this, $getter));
+			call_user_func_array(array($package, $setter), array($value));
+		}
+		return $package;
 	}
 }
 

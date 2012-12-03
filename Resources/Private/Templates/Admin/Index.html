@@ -9,14 +9,18 @@
 	<table>
 		<thead>
 		<tr>
+			<th>Title</th>
 			<th>Path</th>
+			<th>Repository type</th>
 		</tr>
 		</thead>
 		<tbody>
 		<f:for each="{documents}" as="document">
 
 		<tr>
+			<td>{document.title}</td>
 			<td>{document.uri}</td>
+			<td>{document.repositoryType}</td>
 		</tr>
 
 
