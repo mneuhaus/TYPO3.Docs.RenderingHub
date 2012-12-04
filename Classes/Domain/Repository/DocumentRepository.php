@@ -16,25 +16,80 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 
 	/**
-	 * Finds documents belonging to the TER given a status
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Finder\Uri
+	 */
+	protected $uriFinder;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
+	 */
+	protected $documentRepository;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Service\ImportService
+	 */
+	protected $importService;
+
+	/**
+	 * A reference to the Object Manager
 	 *
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The TER documents
+	 * @FLOW3\Inject
+	 * @var \TYPO3\FLOW3\Object\ObjectManagerInterface
+	 */
+	protected $objectManager;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Utility\RunTimeSettings
+	 */
+	protected $runTimeSettings;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Service\Build\JobService
+	 */
+	protected $buildService;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Finder\Directory
+	 */
+	protected $directoryService;
+
+	/**
+	 * @FLOW3\Inject
+	 * @var \TYPO3\Docs\Log\SystemLogger
+	 */
+	protected $systemLogger;
+
+	/**
+	 * Finds documents belonging to the Ter given a status
+	 *
+	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The Ter documents
 	 */
 	public function findForHomePage() {
 		$query = $this->createQuery();
-		return $query->matching(
-			$query->logicalAnd(
-				$query->like('repository', '/Documentation/TYPO3/%'),
-				$query->equals('repositoryType', 'git')
-			)
-		)->execute();
+//		return $query->matching(
+//			$query->logicalAnd(
+//				$query->like('repository', '/Documentation/TYPO3/%'),
+//				$query->equals('repositoryType', 'git')
+//			)
+//		)
+		$result = $query
+			->setOrderings(array('repositoryType' => \TYPO3\FLOW3\Persistence\QueryInterface::ORDER_ASCENDING))
+			->execute();
+
+		return $result;
 	}
 
 	/**
-	 * Finds documents belonging to the TER given a status
+	 * Finds documents belonging to the Ter given a status
 	 *
 	 * @param string $status the status of the document
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The TER documents
+	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The Ter documents
 	 */
 	public function findTerDocumentsByStatus($status) {
 		$query = $this->createQuery();
@@ -58,13 +113,13 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 		return $query->matching(
 			$query->logicalAnd(
 				$query->equals('packageKey', $packageKey),
-				$query->equals('status', \TYPO3\Docs\Build\Utility\StatusMessage::SYNC)
+				$query->equals('status', \TYPO3\Docs\Utility\StatusMessage::SYNC)
 			)
 		)->execute();
 	}
 
 	/**
-	 * counts documents belonging to the TER given a status
+	 * counts documents belonging to the Ter given a status
 	 *
 	 * @param string $status the status of the document
 	 * @return integer
@@ -77,7 +132,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	 * Finds documents belonging to git.typo3.org given a status
 	 *
 	 * @param string $status the status of the document
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The TER documents
+	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The Ter documents
 	 */
 	public function findGitDocumentsByStatus($status) {
 		$query = $this->createQuery();
@@ -122,18 +177,6 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	}
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\Docs\Build\Finder\Uri
-	 */
-	protected $uriFinder;
-
-	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
-	 */
-	protected $documentRepository;
-
-	/**
 	 * Update the Uri Alias for a package key.
 	 *
 	 * @param string $packageKey
@@ -158,7 +201,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 			// Default value should be empty
 			if ($document->getUriAlias() != '') {
 				$document->setUriAlias('');
-				$document->setStatus(\TYPO3\Docs\Build\Utility\StatusMessage::SYNC);
+				$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::SYNC);
 				$this->update($document);
 			}
 		}
@@ -168,10 +211,52 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 		// Remove last segment
 		$parts = explode('/', $uri);
 		array_pop($parts);
-		$documentWithHighestVersion->setUriAlias(implode('/', $parts) . '/current');
+		$documentWithHighestVersion->setUriAlias(implode('/', $parts) . '/latest');
 		$this->update($documentWithHighestVersion);
 	}
 
+	/**
+	 * Import document coming from different packages repository type
+	 *
+	 * @param string $repositoryType
+	 * @param string $packageKey the package name
+	 * @param string $version the package name
+	 * @return void
+	 */
+	public function importByRepositoryType($repositoryType, $package, $version) {
+		/** @var $strategyInterface \TYPO3\Docs\Service\Import\StrategyInterface */
+		$strategyInterface = 'Import\\' . ucfirst($repositoryType) . 'Strategy';
+		$this->importService->setStrategy($strategyInterface)
+			->import($package, $version);
+	}
 
+	/**
+	 * Update the rendering of a all Documents.
+	 *
+	 * @return void
+	 */
+	public function updateAll() {
+		$documents = $this->documentRepository->findAll();
+
+		/** @var $document \TYPO3\Docs\Domain\Model\Document */
+		foreach ($documents as $document) {
+
+			$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::RENDER);
+			$this->documentRepository->update($document);
+			$message = sprintf('%s: added new document object %s', ucfirst($document->getRepositoryType()), $document->getUri());
+			$this->systemLogger->log($message, LOG_INFO);
+
+			$directory = $this->directoryService->getBuild($document);
+			\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($directory);
+
+			// Create a job and insert it into the queue
+			$job = $this->buildService->create($document);
+			$this->buildService->queue($job);
+
+			if ($documents->key() >= $this->runTimeSettings->getLimit() - 1) {
+				break;
+			}
+		}
+	}
 }
 ?>

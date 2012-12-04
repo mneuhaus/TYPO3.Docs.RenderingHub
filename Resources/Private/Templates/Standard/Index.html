@@ -6,19 +6,32 @@
 <f:section name="Content">
 	<p>
 
-	<table>
+	<table border="1">
 		<thead>
 		<tr>
+			<th>Title</th>
 			<th>Path</th>
+			<th>Type</th>
+			<th>Repository type</th>
 		</tr>
 		</thead>
 		<tbody>
 		<f:for each="{documents}" as="document">
 
 		<tr>
-			<td>{document.uri}</td>
+			<td>
+				{document.title}
+			</td>
+			<td>
+				<a href="{document.uri}/Index.html" target="_blank">{document.uri}/Index.html</a>
+			</td>
+			<td>
+				{document.type}
+			</td>
+			<td>
+				{document.repositoryType}
+			</td>
 		</tr>
-
 
 		</f:for>
 		</tbody>

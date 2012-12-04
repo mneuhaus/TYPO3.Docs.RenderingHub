@@ -31,6 +31,9 @@ TYPO3:
       gitDatasource: Data/Documentation/Source/Git/packages.json
       gitDatasourceRemote: http://srv104.typo3.org/api/
 
+      # Public path
+      publicDir: Web/typo3cms
+
   Queue:
     queues:
       git:

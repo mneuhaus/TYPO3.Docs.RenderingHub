@@ -521,10 +521,10 @@ class Document {
 	}
 
 	/**
-	 * @return \TYPO3\Docs\Build\Domain\Model\Package
+	 * @return \TYPO3\Docs\Domain\Model\Package
 	 */
 	public function toPackage() {
-		$package = new \TYPO3\Docs\Build\Domain\Model\Package();
+		$package = new \TYPO3\Docs\Domain\Model\Package();
 
 		$ref = new \ReflectionObject($package);
 		$properties = $ref->getProperties();
