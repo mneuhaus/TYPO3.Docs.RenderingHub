@@ -79,6 +79,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 //			)
 //		)
 		$result = $query
+			->matching($query->logicalNot($query->equals('status', 'documentation-not-found')))
 			->setOrderings(array('repositoryType' => \TYPO3\FLOW3\Persistence\QueryInterface::ORDER_ASCENDING))
 			->execute();
 
@@ -231,6 +232,22 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	}
 
 	/**
+	 * Import document coming from different packages repository type
+	 *
+	 * @param string $repositoryType
+	 * @return void
+	 */
+	public function importAllByRepositoryType($repositoryType) {
+		$strategyInterfaceName = 'TYPO3\Docs\Service\Import\\' . ucfirst($repositoryType) . 'Strategy';
+
+		/** @var $strategyInterface \TYPO3\Docs\Service\Import\StrategyInterface */
+		$strategyInterface = $this->objectManager->get($strategyInterfaceName);
+
+		$this->importService->setStrategy($strategyInterface)
+			->importAll();
+	}
+
+	/**
 	 * Update the rendering of a all Documents.
 	 *
 	 * @return void
@@ -243,7 +260,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 
 			$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::RENDER);
 			$this->documentRepository->update($document);
-			$message = sprintf('%s: added new document object %s', ucfirst($document->getRepositoryType()), $document->getUri());
+			$message = sprintf('%s: updating new document object %s', ucfirst($document->getRepositoryType()), $document->getUri());
 			$this->systemLogger->log($message, LOG_INFO);
 
 			$directory = $this->directoryService->getBuild($document);

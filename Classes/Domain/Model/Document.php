@@ -538,6 +538,21 @@ class Document {
 		}
 		return $package;
 	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIsOk() {
+		return $this->getStatus() === \TYPO3\Docs\Utility\StatusMessage::OK;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function getIsProcessing() {
+		return $this->getStatus() === \TYPO3\Docs\Utility\StatusMessage::RENDER ||
+			$this->getStatus() === \TYPO3\Docs\Utility\StatusMessage::SYNC;
+	}
 }
 
 ?>

@@ -34,7 +34,7 @@ class Typo3CmsExtensionCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase {
 		if ($parts[0] == 'TYPO3v4' && $parts[1] == 'Extensions') {
 			// Remove the .git suffix
 			$documentBaseName = str_replace('.git', '', array_pop($parts));
-			$result = sprintf('typo3cms/extensions/%s/%s',
+			$result = sprintf('/typo3cms/extensions/%s/%s',
 				$documentBaseName,
 				$package->getVersion()
 			);

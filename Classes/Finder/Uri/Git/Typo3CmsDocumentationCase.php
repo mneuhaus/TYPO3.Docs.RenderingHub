@@ -42,7 +42,7 @@ class Typo3CmsDocumentationCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase 
 				$documentBaseName = str_replace($languageSuffix, '', $documentBaseName);
 			}
 			$documentSuffix = ucfirst(array_pop($parts));
-			$result = sprintf('typo3cms/%s%s/%s%s',
+			$result = sprintf('/typo3cms/%s%s/%s%s',
 				$documentBaseName,
 				$documentSuffix,
 				$languageSegment,

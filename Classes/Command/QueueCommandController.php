@@ -129,7 +129,7 @@ EOF;
 					\TYPO3\Docs\Utility\ColorCli::getColoredString('[FAILED]', 'red'));
 				\TYPO3\Docs\Utility\Console::output($message);
 			} elseif (! $this->queueUtility->isOpenOfficeProcess()){
-				$message = sprintf('%s OpenOffice daemon is not running. Can you start it? Attention, It should be run as docstypo3org user!',
+				$message = sprintf('%s OpenOffice daemon is not running. Can you start it?',
 					\TYPO3\Docs\Utility\ColorCli::getColoredString('[FAILED]', 'red'));
 				\TYPO3\Docs\Utility\Console::output($message);
 			}

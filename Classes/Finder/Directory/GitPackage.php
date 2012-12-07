@@ -58,7 +58,7 @@ class GitPackage implements \TYPO3\Docs\Finder\Directory\FinderInterface {
 	 * @return string Full path to the document directory for the specified extension version
 	 */
 	public function getBuild(\TYPO3\Docs\Domain\Model\Document $document) {
-		$directoryPath = sprintf('%s/%s', $this->settings['buildDir'], $document->getUri());
+		$directoryPath = sprintf('%s%s', $this->settings['buildDir'], $document->getUri());
 		\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($directoryPath);
 		return $directoryPath;
 	}

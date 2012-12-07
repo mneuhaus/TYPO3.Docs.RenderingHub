@@ -27,7 +27,7 @@ class FallBackCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase {
 	 * @return string
 	 */
 	public function handle($package) {
-		return sprintf('%s/%s', $package->getUri(), $package->getVersion());
+		return sprintf('/%s/%s', $package->getUri(), $package->getVersion());
 	}
 }
 
