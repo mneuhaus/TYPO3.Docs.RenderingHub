@@ -29,7 +29,7 @@ TYPO3:
       # Git
       gitSourceDir: Data/Documentation/Source/Git
       gitDatasource: Data/Documentation/Source/Git/packages.json
-      gitDatasourceRemote: http://srv104.typo3.org/api/
+      gitDatasourceRemote: http://review.typo3.org/projects/?format=JSON&d
 
       # Public path
       publicDir: Web/typo3cms

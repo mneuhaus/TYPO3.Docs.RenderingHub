@@ -105,20 +105,25 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 
 		$content = file_get_contents($this->settings['gitDatasourceRemote']);
 
-		$packages = json_decode($content);
+		// There is a bug in the JSON output
+		if (strpos($content, ")]}'") === 0) {
+			$content = str_replace(")]}'", '', $content);
+		}
+
+		$packages = json_decode(trim($content));
 
 		$cachePackages = array();
-		foreach ($packages as $packageIdentifier) {
+		foreach ($packages as $packageKey => $data) {
 
 			// Makes sure to have the opening slash
-			$packageIdentifier = '/' . ltrim($packageIdentifier, '/');
+			$packageKey = '/' . ltrim($packageKey, '/');
 
-			$packagesParts = \TYPO3\FLOW3\Utility\Arrays::trimExplode('/', $packageIdentifier);
-			$repositoryUri = $packageIdentifier . '.git';
+			$packagesParts = \TYPO3\FLOW3\Utility\Arrays::trimExplode('/', $packageKey);
+			$repositoryUri = $packageKey . '.git';
 			$repositoryUrl = $this->repositoryFinder->getRepositoryUrl($repositoryUri);
 
 			// TRUE for official TYPO3 documentation
-			if (preg_match('/^\/Documentation\/TYPO3/is', $packageIdentifier)) {
+			if (preg_match('/^\/Documentation\/TYPO3/is', $packageKey)) {
 
 				$cachePackages[] = array(
 					'product' => 'TYPO3',
@@ -130,7 +135,7 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 					'versions' => $this->getRepositoryTags($repositoryUrl),
 				);
 			} // TRUE for TYPO3 extensions
-			elseif (preg_match('/^\/TYPO3v4\/Extensions/is', $packageIdentifier)) {
+			elseif (preg_match('/^\/TYPO3v4\/Extensions/is', $packageKey)) {
 
 				$cachePackages[] = array(
 					'product' => 'TYPO3',
@@ -142,7 +147,7 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 					'versions' => $this->getRepositoryTags($repositoryUrl, $onlyMaterBranch = TRUE),
 				);
 			} // TRUE for FLOW3 packages
-			elseif (preg_match('/^\/FLOW3\/Packages/is', $packageIdentifier)) {
+			elseif (preg_match('/^\/FLOW3\/Packages/is', $packageKey)) {
 
 				$cachePackages[] = array(
 					'product' => 'FLOW3',
