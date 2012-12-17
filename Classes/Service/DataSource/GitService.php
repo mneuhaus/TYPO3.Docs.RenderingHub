@@ -106,6 +106,7 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 		$content = file_get_contents($this->settings['gitDatasourceRemote']);
 
 		// There is a bug in the JSON output
+		// @see http://review.coreboot.org/Documentation/rest-api.html
 		if (strpos($content, ")]}'") === 0) {
 			$content = str_replace(")]}'", '', $content);
 		}
