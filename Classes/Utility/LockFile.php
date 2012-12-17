@@ -39,6 +39,9 @@ class LockFile {
 		$this->settings = $this->configurationManager->getConfiguration();
 
 		$this->lockFile = $this->settings['lockFile'];
+
+		// Make sure the existing file hierarchy exists
+		\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($this->settings['buildDir']);
 	}
 
 	/**
