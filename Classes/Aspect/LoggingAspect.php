@@ -23,11 +23,11 @@ class LoggingAspect {
 	/**
 	 * Send email in production context only avoiding spam
 	 *
-	 * @param \TYPO3\FLOW3\AOP\JoinPointInterface $joinPoint
+	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint
 	 * @FLOW3\Around("method(TYPO3\Docs\Log\.*Logger->email())")
 	 * @return boolean
 	 */
-	public function sendEmail(\TYPO3\FLOW3\AOP\JoinPointInterface $joinPoint) {
+	public function sendEmail(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
 
 		$result = FALSE;
 		if ($this->bootstrap->getContext() == 'Production') {

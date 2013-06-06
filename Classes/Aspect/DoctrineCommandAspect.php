@@ -55,11 +55,11 @@ class DoctrineCommandAspect {
 	/**
 	 * Add "enum" as additional mapping type for doctrine
 	 *
-	 * @param \TYPO3\FLOW3\AOP\JoinPointInterface $joinPoint
+	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint
 	 * @FLOW3\Before("method(TYPO3\FLOW3\Command\DoctrineCommandController->updateCommand())")
 	 * @return boolean
 	 */
-	public function addCustomType(\TYPO3\FLOW3\AOP\JoinPointInterface $joinPoint) {
+	public function addCustomType(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
 		$platform = $this->entityManager->getConnection()->getDatabasePlatform();
 		$platform->registerDoctrineTypeMapping('enum', 'string');
 	}
@@ -67,11 +67,11 @@ class DoctrineCommandAspect {
 	/**
 	 * Create a custom table for storing packages in a "personal" way. Actually, this table is meant for sto
 	 *
-	 * @param \TYPO3\FLOW3\AOP\JoinPointInterface $joinPoint
+	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint
 	 * @FLOW3\Before("method(TYPO3\FLOW3\Command\DoctrineCommandController->updateCommand())")
 	 * @return boolean
 	 */
-	public function createTable(\TYPO3\FLOW3\AOP\JoinPointInterface $joinPoint) {
+	public function createTable(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
 
 		/** @var $schemaManager \Doctrine\DBAL\Schema\AbstractSchemaManager */
 		$schemaManager = $this->connection->getSchemaManager();
