@@ -35,7 +35,8 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	protected $documentRepository;
 
 	/**
-	 * @var \Doctrine\ORM\EntityManager
+	 * @Flow\Inject
+	 * @var \Doctrine\Common\Persistence\ObjectManager
 	 */
 	protected $entityManager;
 
@@ -56,13 +57,6 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	protected $tableName;
 
 	/**
-	 * @param \Doctrine\Common\Persistence\ObjectManager $entityManager
-	 */
-	public function injectEntityManager(\Doctrine\Common\Persistence\ObjectManager $entityManager) {
-		$this->entityManager = $entityManager;
-	}
-
-	/**
 	 * Further object initialization
 	 *
 	 * @return void
@@ -76,11 +70,20 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	 * Count the number of documents that would be processed
 	 *
 	 * @param string $repositoryType a repository type which can be git, ter, ...
-	 * @return int
+	 * @return integer
+	 * @throws \InvalidArgumentException
 	 */
 	public function countPackageToProcess($repositoryType) {
-		$packageRepository = sprintf('%sPackageRepository', $repositoryType);
-		$numberOfPackagesWithVersions = $this->$packageRepository->countAll();
+		switch ($repositoryType) {
+			case 'ter':
+				$numberOfPackagesWithVersions = $this->terPackageRepository->countAll();
+				break;
+			case 'git':
+				$numberOfPackagesWithVersions = $this->gitPackageRepository->countAll();
+				break;
+			default:
+				throw new \InvalidArgumentException('Invalid repository type "' . $repositoryType . '" given.', 1370522452);
+		}
 		$numberOfDocuments = $this->documentRepository->countByRepositoryType($repositoryType);
 
 		return $numberOfPackagesWithVersions - $numberOfDocuments;
