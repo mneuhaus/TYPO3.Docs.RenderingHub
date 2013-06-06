@@ -2,22 +2,22 @@
 namespace TYPO3\Docs\Service\DataSource;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Class dealing with Ter data source
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class TerService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
@@ -28,7 +28,7 @@ class TerService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
@@ -104,8 +104,8 @@ class TerService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 	 * @return void
 	 */
 	public function write() {
-		\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively(dirname($this->settings['terDatasource']));
-		$content = \TYPO3\FLOW3\Utility\Files::getFileContents($this->settings['terDatasourceRemote']);
+		\TYPO3\Flow\Utility\Files::createDirectoryRecursively(dirname($this->settings['terDatasource']));
+		$content = \TYPO3\Flow\Utility\Files::getFileContents($this->settings['terDatasourceRemote']);
 		\TYPO3\Docs\Utility\Files::write($this->settings['terDatasource'], $content);
 	}
 }

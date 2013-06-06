@@ -16,7 +16,7 @@ namespace TYPO3\Docs\Exception;
  *
  * @api
  */
-class WriteFileException extends \TYPO3\FLOW3\Exception {
+class WriteFileException extends \TYPO3\Flow\Exception {
 
 }
 

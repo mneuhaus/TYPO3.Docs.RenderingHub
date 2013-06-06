@@ -3,14 +3,14 @@
 namespace TYPO3\Docs\Aspect;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
- * @FLOW3\Aspect
+ * @Flow\Aspect
  */
 class DoctrineCommandAspect {
 
@@ -20,10 +20,10 @@ class DoctrineCommandAspect {
 	protected $entityManager;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\Doctrine\Mapping\Driver\Flow3AnnotationDriver
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Persistence\Doctrine\Mapping\Driver\FlowAnnotationDriver
 	 */
-	protected $flow3AnnotationDriver;
+	protected $flowAnnotationDriver;
 
 	/**
 	 * @var \Doctrine\DBAL\Connection
@@ -42,7 +42,7 @@ class DoctrineCommandAspect {
 	 */
 	public function initializeObject() {
 		$this->connection = $this->entityManager->getConnection();
-		$this->tableName = $this->flow3AnnotationDriver->inferTableNameFromClassName('TYPO3\Docs\Domain\Model\Package');
+		$this->tableName = $this->flowAnnotationDriver->inferTableNameFromClassName('TYPO3\Docs\Domain\Model\Package');
 	}
 
 	/**
@@ -55,11 +55,11 @@ class DoctrineCommandAspect {
 	/**
 	 * Add "enum" as additional mapping type for doctrine
 	 *
-	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint
-	 * @FLOW3\Before("method(TYPO3\FLOW3\Command\DoctrineCommandController->updateCommand())")
+	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+	 * @Flow\Before("method(TYPO3\Flow\Command\DoctrineCommandController->updateCommand())")
 	 * @return boolean
 	 */
-	public function addCustomType(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
+	public function addCustomType(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint) {
 		$platform = $this->entityManager->getConnection()->getDatabasePlatform();
 		$platform->registerDoctrineTypeMapping('enum', 'string');
 	}
@@ -67,11 +67,11 @@ class DoctrineCommandAspect {
 	/**
 	 * Create a custom table for storing packages in a "personal" way. Actually, this table is meant for sto
 	 *
-	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint
-	 * @FLOW3\Before("method(TYPO3\FLOW3\Command\DoctrineCommandController->updateCommand())")
+	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+	 * @Flow\Before("method(TYPO3\Flow\Command\DoctrineCommandController->updateCommand())")
 	 * @return boolean
 	 */
-	public function createTable(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
+	public function createTable(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint) {
 
 		/** @var $schemaManager \Doctrine\DBAL\Schema\AbstractSchemaManager */
 		$schemaManager = $this->connection->getSchemaManager();

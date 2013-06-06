@@ -2,21 +2,21 @@
 namespace TYPO3\Docs\Controller;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Standard controller for the TYPO3.Docs package
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class DocumentController extends \TYPO3\FLOW3\Mvc\Controller\ActionController {
+class DocumentController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;

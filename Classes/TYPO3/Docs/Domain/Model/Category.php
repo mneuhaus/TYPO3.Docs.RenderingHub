@@ -2,17 +2,17 @@
 namespace TYPO3\Docs\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A Category
  *
- * @FLOW3\Entity
+ * @Flow\Entity
  */
 class Category {
 
@@ -20,8 +20,8 @@ class Category {
 	 * The Category's title
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="StringLength", options={ "minimum"=10, "maximum"=100 })
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="StringLength", options={ "minimum"=10, "maximum"=100 })
 	 * @ORM\Column(length=100)
 	 */
 	protected $title = '';

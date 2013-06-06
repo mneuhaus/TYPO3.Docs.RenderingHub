@@ -2,19 +2,19 @@
 namespace TYPO3\Docs\Utility;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Utility class dealing with Script. This class was used at some point but not anymore currently. It can be probably removed.
  * However, method "executeCommand" was taken from Flow and slightly changed enabling to
  * pass additional settings. @todo report this modification before removing the class
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class Script {
 
@@ -26,13 +26,13 @@ class Script {
 	 * @param array $settings The FLOW3 settings
 	 * @param boolean $outputResults if FALSE the output of this command is only echoed if the execution was not successful
 	 * @return boolean TRUE if the command execution was successful (exit code = 0)
-	 * @see \TYPO3\FLOW3\Core\Booting\Scripts::executeCommand
+	 * @see \TYPO3\Flow\Core\Booting\Scripts::executeCommand
 	 * @api
 	 */
 	static public function executeCommand($commandIdentifier, array $settings, $outputResults = TRUE) {
 		$subRequestEnvironmentVariables = array(
-			'FLOW3_ROOTPATH' => FLOW3_PATH_ROOT,
-			'FLOW3_CONTEXT' => $settings['core']['context']
+			'FLOW_ROOTPATH' => FLOW_PATH_ROOT,
+			'FLOW_CONTEXT' => $settings['core']['context']
 		);
 		if (isset($settings['core']['subRequestEnvironmentVariables'])) {
 			$subRequestEnvironmentVariables = array_merge($subRequestEnvironmentVariables, $settings['core']['subRequestEnvironmentVariables']);
@@ -54,8 +54,8 @@ class Script {
 			}
 		}
 
-		$phpBinaryPathAndFilename = escapeshellcmd(\TYPO3\FLOW3\Utility\Files::getUnixStylePath($settings['core']['phpBinaryPathAndFilename']));
-		$command .= sprintf('"%s" -c %s %s %s %s', $phpBinaryPathAndFilename, escapeshellarg(php_ini_loaded_file()), escapeshellarg(FLOW3_PATH_FLOW3 . 'Scripts/flow3.php'), escapeshellarg($commandIdentifier), $additionalArguments);
+		$phpBinaryPathAndFilename = escapeshellcmd(\TYPO3\Flow\Utility\Files::getUnixStylePath($settings['core']['phpBinaryPathAndFilename']));
+		$command .= sprintf('"%s" -c %s %s %s %s', $phpBinaryPathAndFilename, escapeshellarg(php_ini_loaded_file()), escapeshellarg(FLOW_PATH_FLOW . 'Scripts/flow3.php'), escapeshellarg($commandIdentifier), $additionalArguments);
 		$output = array();
 		exec($command, $output, $result);
 		if ($outputResults || $result !== 0) {

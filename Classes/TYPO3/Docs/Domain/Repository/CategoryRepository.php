@@ -2,18 +2,18 @@
 namespace TYPO3\Docs\Domain\Repository;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A repository for Categories
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class CategoryRepository extends \TYPO3\FLOW3\Persistence\Repository {
+class CategoryRepository extends \TYPO3\Flow\Persistence\Repository {
 
 	// add customized methods here
 

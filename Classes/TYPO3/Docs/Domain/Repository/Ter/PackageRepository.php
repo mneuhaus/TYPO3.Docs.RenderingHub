@@ -3,16 +3,16 @@
 namespace TYPO3\Docs\Domain\Repository\Ter;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A repository for Ter packages
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository {
 
@@ -25,7 +25,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	const ERRORCODE_CORRUPTEDT3XSTRUCTURENOFILESFOUND = 'corrupted-file-structure';
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
@@ -41,19 +41,19 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Service\DataSource\TerService
 	 */
 	protected $dataSource;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\PackageRepository
 	 */
 	protected $packageRepository;
@@ -236,7 +236,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 
 				if (preg_match('/^Documentation\/|^doc\/manual.sxw/is', $file['name'])) {
 					$directory = $targetDirectory . '/' . dirname($file['name']);
-					\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($directory);
+					\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directory);
 
 					$fileFullPath = $targetDirectory . '/' . $file['name'];
 					\TYPO3\Docs\Utility\Files::write($fileFullPath, $file['content']);

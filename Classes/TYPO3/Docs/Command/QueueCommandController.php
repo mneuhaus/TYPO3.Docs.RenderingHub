@@ -2,20 +2,20 @@
 namespace TYPO3\Docs\Command;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Document rendering command controller
  * to be used as a basis for the documentation rendering by the doc team
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class QueueCommandController extends \TYPO3\FLOW3\Cli\CommandController {
+class QueueCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
 	 * @var array
@@ -28,7 +28,7 @@ class QueueCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	/**
 	 * A reference to an User Logger
 	 *
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\UserLogger
 	 */
 	protected $logger;
@@ -39,19 +39,19 @@ class QueueCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Queue\QueueManager
 	 */
 	protected $queueManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Utility\Queue
 	 */
 	protected $queueUtility;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;

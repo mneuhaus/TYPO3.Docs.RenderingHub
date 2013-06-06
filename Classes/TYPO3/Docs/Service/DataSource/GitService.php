@@ -2,22 +2,22 @@
 namespace TYPO3\Docs\Service\DataSource;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Class dealing with Git data source
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
@@ -28,13 +28,13 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Repository
 	 */
 	protected $repositoryFinder;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
@@ -119,7 +119,7 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 			// Makes sure to have the opening slash
 			$packageKey = '/' . ltrim($packageKey, '/');
 
-			$packagesParts = \TYPO3\FLOW3\Utility\Arrays::trimExplode('/', $packageKey);
+			$packagesParts = \TYPO3\Flow\Utility\Arrays::trimExplode('/', $packageKey);
 			$repositoryUri = $packageKey . '.git';
 			$repositoryUrl = $this->repositoryFinder->getRepositoryUrl($repositoryUri);
 

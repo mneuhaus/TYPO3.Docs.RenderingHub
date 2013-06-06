@@ -2,17 +2,17 @@
 namespace TYPO3\Docs\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * A Document
  *
- * @FLOW3\Entity
+ * @Flow\Entity
  */
 class Document {
 
@@ -20,8 +20,8 @@ class Document {
 	 * Title of the document
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="StringLength", options={ "minimum"=3, "maximum"=150 })
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=150 })
 	 * @ORM\Column(length=255)
 	 */
 	protected $title = '';
@@ -38,8 +38,8 @@ class Document {
 	 * Type of document (manual, book?)
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="StringLength", options={ "minimum"=3, "maximum"=100 })
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=100 })
 	 * @ORM\Column(length=100)
 	 */
 	protected $type = '';
@@ -49,7 +49,7 @@ class Document {
 	 * Should stick to the conventions of version_compare(), see http://php.net/version_compare
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="NotEmpty")
 	 * @ORM\Column(length=30)
 	 */
 	protected $version = '';
@@ -58,7 +58,7 @@ class Document {
 	 * Status code of the document.
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="NotEmpty")
 	 * @ORM\Column(length=50, columnDefinition="ENUM('ok', 'documentation-not-found', 'ok-with-warnings', 'error-parsing', 'waiting-rendering', 'waiting-sync')")
 	 */
 	protected $status = '';
@@ -67,7 +67,7 @@ class Document {
 	 * Date and time of the rendering
 	 *
 	 * @var \DateTime
-	 * @FLOW3\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="NotEmpty")
 	 */
 	protected $generationDate = '';
 
@@ -75,8 +75,8 @@ class Document {
 	 * Locale of the document (must be a valid locale)
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="LocaleIdentifier")
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="LocaleIdentifier")
 	 * @ORM\Column(length=50)
 	 */
 	protected $locale = '';
@@ -85,8 +85,8 @@ class Document {
 	 * Product to which the documentation belongs, e.g. "TYPO3", "FLOW3"
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="StringLength", options={ "minimum"=3, "maximum"=20 })
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=20 })
 	 * @ORM\Column(length=20)
 	 */
 	protected $product = '';
@@ -95,8 +95,8 @@ class Document {
 	 * Package key to which the documentation belongs
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="StringLength", options={ "minimum"=3, "maximum"=100 })
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=100 })
 	 * @ORM\Column(length=100)
 	 */
 	protected $packageKey = '';
@@ -105,8 +105,8 @@ class Document {
 	 * URI at which the document is available
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="NotEmpty")
-	 * @FLOW3\Validate(type="StringLength", options={ "maximum"=255 })
+	 * @Flow\Validate(type="NotEmpty")
+	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
 	 * @ORM\Column(length=255, unique=true)
 	 */
 	protected $uri = '';
@@ -115,7 +115,7 @@ class Document {
 	 * URI at which the document is also available
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="StringLength", options={ "maximum"=255 })
+	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
 	 * @ORM\Column(length=255)
 	 */
 	protected $uriAlias = '';
@@ -124,7 +124,7 @@ class Document {
 	 * The source URI where the package comes from.
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="StringLength", options={ "maximum"=255 })
+	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
 	 * @ORM\Column(length=255)
 	 */
 	protected $repository = '';
@@ -133,7 +133,7 @@ class Document {
 	 * The tag name of a repository for Git Document
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="StringLength", options={ "maximum"=255 })
+	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
 	 * @ORM\Column(length=255)
 	 */
 	protected $repositoryTag = '';
@@ -150,7 +150,7 @@ class Document {
 	 * Get package remote file
 	 *
 	 * @var string
-	 * @FLOW3\Validate(type="StringLength", options={ "maximum"=150 })
+	 * @Flow\Validate(type="StringLength", options={ "maximum"=150 })
 	 * @ORM\Column(length=150)
 	 */
 	protected $packageFile = '';
@@ -173,7 +173,7 @@ class Document {
 	protected $categories;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;
@@ -238,7 +238,7 @@ class Document {
 	 * @return string
 	 */
 	public function getLocaleObject() {
-		return new \TYPO3\FLOW3\I18n\Locale($this->locale);
+		return new \TYPO3\Flow\I18n\Locale($this->locale);
 	}
 
 	/**
@@ -337,7 +337,7 @@ class Document {
 	 * @return string
 	 */
 	public function getUriObject() {
-		return new \TYPO3\FLOW3\Http\Uri($this->uri);
+		return new \TYPO3\Flow\Http\Uri($this->uri);
 	}
 
 	/**

@@ -16,7 +16,7 @@ namespace TYPO3\Docs\Domain\Repository;
  *
  * @api
  */
-abstract class AbstractRepository implements \TYPO3\FLOW3\Persistence\RepositoryInterface {
+abstract class AbstractRepository implements \TYPO3\Flow\Persistence\RepositoryInterface {
 
 	/**
 	 * Warning: if you think you want to set this,
@@ -75,7 +75,7 @@ abstract class AbstractRepository implements \TYPO3\FLOW3\Persistence\Repository
 	/**
 	 * Returns all objects of this repository.
 	 *
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The query result
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface The query result
 	 * @api
 	 */
 	public function findAll() {
@@ -96,7 +96,7 @@ abstract class AbstractRepository implements \TYPO3\FLOW3\Persistence\Repository
 	/**
 	 * Returns a query for objects of this repository
 	 *
-	 * @return \TYPO3\FLOW3\Persistence\QueryInterface
+	 * @return \TYPO3\Flow\Persistence\QueryInterface
 	 * @api
 	 */
 	public function createQuery() {
@@ -127,8 +127,8 @@ abstract class AbstractRepository implements \TYPO3\FLOW3\Persistence\Repository
 	/**
 	 * Sets the property names to order results by. Expected like this:
 	 * array(
-	 *  'foo' => \TYPO3\FLOW3\Persistence\QueryInterface::ORDER_ASCENDING,
-	 *  'bar' => \TYPO3\FLOW3\Persistence\QueryInterface::ORDER_DESCENDING
+	 *  'foo' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_ASCENDING,
+	 *  'bar' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_DESCENDING
 	 * )
 	 *
 	 * @param array $defaultOrderings The property names to order by by default

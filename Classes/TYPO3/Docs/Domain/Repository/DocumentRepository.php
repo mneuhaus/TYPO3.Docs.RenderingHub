@@ -2,33 +2,33 @@
 namespace TYPO3\Docs\Domain\Repository;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A repository for Documentations
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
+class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Uri
 	 */
 	protected $uriFinder;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Service\ImportService
 	 */
 	protected $importService;
@@ -36,31 +36,31 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	/**
 	 * A reference to the Object Manager
 	 *
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Object\ObjectManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Object\ObjectManagerInterface
 	 */
 	protected $objectManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Utility\RunTimeSettings
 	 */
 	protected $runTimeSettings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Service\Build\JobService
 	 */
 	protected $buildService;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Directory
 	 */
 	protected $directoryService;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
@@ -68,7 +68,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	/**
 	 * Finds documents belonging to the Ter given a status
 	 *
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The Ter documents
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface The Ter documents
 	 */
 	public function findForHomePage() {
 		$query = $this->createQuery();
@@ -80,7 +80,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 //		)
 		$result = $query
 			->matching($query->logicalNot($query->equals('status', 'documentation-not-found')))
-			->setOrderings(array('repositoryType' => \TYPO3\FLOW3\Persistence\QueryInterface::ORDER_ASCENDING))
+			->setOrderings(array('repositoryType' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_ASCENDING))
 			->execute();
 
 		return $result;
@@ -90,7 +90,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	 * Finds documents belonging to the Ter given a status
 	 *
 	 * @param string $status the status of the document
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The Ter documents
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface The Ter documents
 	 */
 	public function findTerDocumentsByStatus($status) {
 		$query = $this->createQuery();
@@ -107,7 +107,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	 * This corresponds to documents having the status "waiting-sync"
 	 *
 	 * @param string $packageKey
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
 	 */
 	public function findDocumentToBeSync($packageKey) {
 		$query = $this->createQuery();
@@ -133,7 +133,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 	 * Finds documents belonging to git.typo3.org given a status
 	 *
 	 * @param string $status the status of the document
-	 * @return \TYPO3\FLOW3\Persistence\QueryResultInterface The Ter documents
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface The Ter documents
 	 */
 	public function findGitDocumentsByStatus($status) {
 		$query = $this->createQuery();
@@ -264,7 +264,7 @@ class DocumentRepository extends \TYPO3\FLOW3\Persistence\Repository {
 			$this->systemLogger->log($message, LOG_INFO);
 
 			$directory = $this->directoryService->getBuild($document);
-			\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($directory);
+			\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($directory);
 
 			// Create a job and insert it into the queue
 			$job = $this->buildService->create($document);

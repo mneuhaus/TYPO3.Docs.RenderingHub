@@ -3,31 +3,31 @@
 namespace TYPO3\Docs\Aspect;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
- * @FLOW3\Aspect
+ * @Flow\Aspect
  */
 class LoggingAspect {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Core\Bootstrap
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Core\Bootstrap
 	 */
 	protected $bootstrap;
 
 	/**
 	 * Send email in production context only avoiding spam
 	 *
-	 * @param \TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint
-	 * @FLOW3\Around("method(TYPO3\Docs\Log\.*Logger->email())")
+	 * @param \TYPO3\Flow\Aop\JoinPointInterface $joinPoint
+	 * @Flow\Around("method(TYPO3\Docs\Log\.*Logger->email())")
 	 * @return boolean
 	 */
-	public function sendEmail(\TYPO3\FLOW3\Aop\JoinPointInterface $joinPoint) {
+	public function sendEmail(\TYPO3\Flow\Aop\JoinPointInterface $joinPoint) {
 
 		$result = FALSE;
 		if ($this->bootstrap->getContext() == 'Production') {

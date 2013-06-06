@@ -3,33 +3,33 @@
 namespace TYPO3\Docs\Domain\Repository;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A repository for Git packages
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\Ter\PackageRepository
 	 */
 	protected $terPackageRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\Git\PackageRepository
 	 */
 	protected $gitPackageRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;
@@ -40,10 +40,10 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	protected $entityManager;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\Doctrine\Mapping\Driver\Flow3AnnotationDriver
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Persistence\Doctrine\Mapping\Driver\FlowAnnotationDriver
 	 */
-	protected $flow3AnnotationDriver;
+	protected $flowAnnotationDriver;
 
 	/**
 	 * @var \Doctrine\DBAL\Connection
@@ -69,7 +69,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	 */
 	public function initializeObject() {
 		$this->connection = $this->entityManager->getConnection();
-		$this->tableName = $this->flow3AnnotationDriver->inferTableNameFromClassName('TYPO3\Docs\Domain\Model\Package');
+		$this->tableName = $this->flowAnnotationDriver->inferTableNameFromClassName('TYPO3\Docs\Domain\Model\Package');
 	}
 
 	/**

@@ -2,17 +2,17 @@
 namespace TYPO3\Docs\Utility;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Utility class dealing with the lock file
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class LockFile {
 
@@ -27,7 +27,7 @@ class LockFile {
 	protected $lockFile;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
@@ -41,7 +41,7 @@ class LockFile {
 		$this->lockFile = $this->settings['lockFile'];
 
 		// Make sure the existing file hierarchy exists
-		\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($this->settings['buildDir']);
+		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($this->settings['buildDir']);
 	}
 
 	/**

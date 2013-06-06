@@ -2,17 +2,17 @@
 namespace TYPO3\Docs\Utility;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Utility class dealing with files
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class Files  {
 
@@ -68,7 +68,7 @@ class Files  {
 
 		$directory = dirname($file);
 		if (!is_dir($directory)) {
-			\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($directory);
+			\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directory);
 		}
 
 		// write content

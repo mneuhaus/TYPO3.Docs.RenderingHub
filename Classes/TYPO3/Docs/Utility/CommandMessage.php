@@ -2,28 +2,28 @@
 namespace TYPO3\Docs\Utility;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Utility class dealing with message on the console
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class CommandMessage  {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\PackageRepository
 	 */
 	protected $packageRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;

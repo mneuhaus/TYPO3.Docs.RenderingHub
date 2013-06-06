@@ -2,17 +2,17 @@
 namespace TYPO3\Docs\Finder;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Class for resolving directory path of a git package
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class File implements \TYPO3\Docs\Finder\File\FinderInterface {
 
@@ -22,7 +22,7 @@ class File implements \TYPO3\Docs\Finder\File\FinderInterface {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
@@ -80,7 +80,7 @@ class File implements \TYPO3\Docs\Finder\File\FinderInterface {
 	 * @return string the extension name
 	 */
 	public function getExtensionFileName($extensionKey, $version) {
-		list ($majorVersion, $minorVersion, $devVersion) = \TYPO3\FLOW3\Utility\Arrays::integerExplode('.', $version);
+		list ($majorVersion, $minorVersion, $devVersion) = \TYPO3\Flow\Utility\Arrays::integerExplode('.', $version);
 		return strtolower($extensionKey) . '_' . $majorVersion . '.' . $minorVersion . '.' . $devVersion;
 	}
 }

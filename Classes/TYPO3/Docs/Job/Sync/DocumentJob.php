@@ -2,12 +2,12 @@
 namespace TYPO3\Docs\Job\Sync;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Job to render a single documentation for a Git repository.
@@ -16,8 +16,8 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class DocumentJob implements \TYPO3\Queue\Job\JobInterface {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
 
@@ -27,19 +27,19 @@ class DocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	protected $packageKey;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\UserLogger
 	 */
 	protected $userLogger;
@@ -57,13 +57,13 @@ class DocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Directory
 	 */
 	protected $directoryFinder;
@@ -186,7 +186,7 @@ class DocumentJob implements \TYPO3\Queue\Job\JobInterface {
 
 		// rsync behaves strangely when target directory is not the same as the source
 		// Thus remove the alias uri path first which will be re-created by rsync
-		\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($publicPath);
+		\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($publicPath);
 
 		$command = sprintf('rsync -aE --delete %s/ %s',
 			$buildPath,
@@ -223,9 +223,9 @@ class DocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	 * @return string
 	 */
 	protected function getPublicPath($uri = '', $createDirectory = TRUE) {
-		$publicPath = FLOW3_PATH_WEB . ltrim($uri, '/');
+		$publicPath = FLOW_PATH_WEB . ltrim($uri, '/');
 		if ($createDirectory) {
-			\TYPO3\FLOW3\Utility\Files::createDirectoryRecursively($publicPath);
+			\TYPO3\Flow\Utility\Files::createDirectoryRecursively($publicPath);
 		}
 		return $publicPath;
 	}

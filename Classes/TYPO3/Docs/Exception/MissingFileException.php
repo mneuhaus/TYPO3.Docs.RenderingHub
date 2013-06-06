@@ -16,7 +16,7 @@ namespace TYPO3\Docs\Exception;
  *
  * @api
  */
-class MissingFileException extends \TYPO3\FLOW3\Exception {
+class MissingFileException extends \TYPO3\Flow\Exception {
 
 }
 

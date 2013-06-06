@@ -2,18 +2,18 @@
 namespace TYPO3\Docs\Utility;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Utility class dealing with color cli
  * @see http://www.if-not-true-then-false.com/2010/php-class-for-coloring-php-command-line-cli-scripts-output-php-output-colorizing-using-bash-shell-colors/
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class ColorCli {
 

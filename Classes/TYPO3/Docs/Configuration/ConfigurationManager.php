@@ -2,17 +2,17 @@
 namespace TYPO3\Docs\Configuration;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Class dealing with configuration
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class ConfigurationManager {
 
@@ -22,8 +22,8 @@ class ConfigurationManager {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Configuration\ConfigurationManager
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
@@ -45,7 +45,7 @@ class ConfigurationManager {
 	 */
 	public function getConfiguration() {
 		return $this->settings;
-		#$settings = $this->configurationManager->getConfiguration(\TYPO3\FLOW3\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Docs');
+		#$settings = $this->configurationManager->getConfiguration(\TYPO3\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, 'TYPO3.Docs');
 		#return array_merge($settings['defaultConfiguration'], $this->settings);
 	}
 }

@@ -3,21 +3,21 @@
 namespace TYPO3\Docs\Domain\Repository\Git;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A repository for Git packages
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
 class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
@@ -33,25 +33,25 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	protected $repositoryType = 'git';
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Service\DataSource\GitService
 	 */
 	protected $dataSource;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\PackageRepository
 	 */
 	protected $packageRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Repository
 	 */
 	protected $repositoryFinder;
@@ -163,7 +163,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	 */
 	public function checkout($sourceDirectory, $repositoryTagName) {
 
-		$sourceDirectoryForLog = str_replace(FLOW3_PATH_DATA, '', $sourceDirectory);
+		$sourceDirectoryForLog = str_replace(FLOW_PATH_DATA, '', $sourceDirectory);
 		$this->systemLogger->log('Git: checking out branch "' . $repositoryTagName . '" in repository ' . $sourceDirectoryForLog, LOG_INFO);
 		$command = "cd {$sourceDirectory}; git checkout --quiet --force " . $repositoryTagName;
 		$result = \TYPO3\Docs\Utility\Console::run($command);
@@ -182,7 +182,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 
 		$repositoryUrl = $this->repositoryFinder->getRepositoryUrl($repositoryUri);
 
-		$sourceDirectoryForLog = str_replace(FLOW3_PATH_DATA, '', $sourceDirectory);
+		$sourceDirectoryForLog = str_replace(FLOW_PATH_DATA, '', $sourceDirectory);
 		$files = glob($sourceDirectory . '/.git/*');
 
 		// TRUE means this is a new repository

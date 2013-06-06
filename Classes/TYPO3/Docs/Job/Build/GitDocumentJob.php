@@ -2,12 +2,12 @@
 namespace TYPO3\Docs\Job\Build;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Job to render a single documentation for a Git repository.
@@ -16,13 +16,13 @@ use TYPO3\FLOW3\Annotations as FLOW3;
 class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 
 	/**
-	 * @FLOW3\Inject
-	 * @var \TYPO3\FLOW3\Persistence\PersistenceManagerInterface
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
 	 */
 	protected $persistenceManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\Git\PackageRepository
 	 */
 	protected $gitPackageRepository;
@@ -35,19 +35,19 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	protected $document;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\UserLogger
 	 */
 	protected $userLogger;
@@ -108,19 +108,19 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Directory
 	 */
 	protected $directoryFinder;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Service\Sync\JobService
 	 */
 	protected $syncJobService;
@@ -191,7 +191,7 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 
 		} else {
 			$this->status = \TYPO3\Docs\Utility\StatusMessage::NOT_FOUND;
-			\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($this->outputDirectory); # Clean up file structure
+			\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->outputDirectory); # Clean up file structure
 			$this->systemLogger->log('Git: nothing to render for document ' . $this->document->getUri(), LOG_INFO);
 		}
 
@@ -288,7 +288,7 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 			$this->persistenceManager->persistAll();
 
 			// Clean up file structure
-			#\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($this->temporaryDirectory);
+			#\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->temporaryDirectory);
 		} elseif ($this->document->getStatus() == \TYPO3\Docs\Utility\StatusMessage::RENDER) { // TRUE when flag "dry-run" is set and new document
 			$this->documentRepository->remove($this->document);
 			$this->persistenceManager->persistAll();
@@ -303,8 +303,8 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	protected function writeMakeFile() {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
 		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/Makefile.fluid');
-		$view->assign('inputDirectory', FLOW3_PATH_ROOT . $this->inputDirectory . '/Documentation');
-		$view->assign('outputDirectory', FLOW3_PATH_ROOT . $this->outputDirectory);
+		$view->assign('inputDirectory', FLOW_PATH_ROOT . $this->inputDirectory . '/Documentation');
+		$view->assign('outputDirectory', FLOW_PATH_ROOT . $this->outputDirectory);
 		file_put_contents($this->temporaryDirectory . '/Makefile', $view->render());
 	}
 
@@ -317,7 +317,7 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
 		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/conf.py.fluid');
 		$view->assign('inputDirectory', $this->inputDirectory);
-		$view->assign('outputDirectory', FLOW3_PATH_ROOT . $this->outputDirectory);
+		$view->assign('outputDirectory', FLOW_PATH_ROOT . $this->outputDirectory);
 		file_put_contents($this->temporaryDirectory . '/conf.py', $view->render());
 	}
 
@@ -328,9 +328,9 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	 */
 	protected function getMakeCleanCommand() {
 		$command = sprintf('cd %s%s; make clean --quiet',
-			FLOW3_PATH_ROOT,
+			FLOW_PATH_ROOT,
 			$this->temporaryDirectory,
-			FLOW3_PATH_DATA
+			FLOW_PATH_DATA
 		);
 		return $command;
 	}
@@ -342,9 +342,9 @@ class GitDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	 */
 	protected function getMakeHtmlCommand() {
 		$command = sprintf('cd %s%s; make html --quiet 2> %s',
-			FLOW3_PATH_ROOT,
+			FLOW_PATH_ROOT,
 			$this->temporaryDirectory,
-			FLOW3_PATH_ROOT . $this->warningFile
+			FLOW_PATH_ROOT . $this->warningFile
 		);
 		return $command;
 	}

@@ -2,53 +2,53 @@
 namespace TYPO3\Docs\Command;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        *
  */
 
-use TYPO3\FLOW3\Annotations as FLOW3;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Document rendering command controller
  * to be used as a basis for the documentation rendering by the doc team
  *
- * @FLOW3\Scope("singleton")
+ * @Flow\Scope("singleton")
  */
-class DocumentCommandController extends \TYPO3\FLOW3\Cli\CommandController {
+class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
 	 */
 	protected $documentRepository;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Directory
 	 */
 	protected $directoryFinder;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Utility\CommandMessage
 	 */
 	protected $commandMessage;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Utility\LockFile
 	 */
 	protected $lockFile;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Utility\RunTimeSettings
 	 */
 	protected $runTimeSettings;
@@ -67,7 +67,7 @@ class DocumentCommandController extends \TYPO3\FLOW3\Cli\CommandController {
 	protected $settings;
 
 	/**
-	 * @FLOW3\Inject
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
@@ -276,7 +276,7 @@ EOF;
 				$directories[] = $this->directoryFinder->getBuild($document);
 				foreach ($directories as $directory) {
 					if (is_dir($directory)) {
-						\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($directory);
+						\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($directory);
 					}
 				}
 
@@ -364,19 +364,19 @@ EOF;
 			$this->documentRepository->removeAll();
 
 			if (is_dir($this->settings['sourceDir'])) {
-				\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($this->settings['sourceDir']);
+				\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->settings['sourceDir']);
 			}
 
 			if (is_dir($this->settings['buildDir'])) {
-				\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($this->settings['buildDir']);
+				\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->settings['buildDir']);
 			}
 
 			if (is_dir($this->settings['temporaryDir'])) {
-				\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($this->settings['temporaryDir']);
+				\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->settings['temporaryDir']);
 			}
 
 			if (is_dir($this->settings['publicDir'])) {
-				\TYPO3\FLOW3\Utility\Files::removeDirectoryRecursively($this->settings['publicDir']);
+				\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->settings['publicDir']);
 			}
 		}
 	}

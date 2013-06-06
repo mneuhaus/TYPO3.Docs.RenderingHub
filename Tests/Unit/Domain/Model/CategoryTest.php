@@ -2,14 +2,14 @@
 namespace TYPO3\Docs\Tests\Unit\Domain\Model;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "TYPO3.Docs".                 *
+ * This script belongs to the TYPO3 Flow package "TYPO3.Docs".            *
  *                                                                        *
  *                                                                        */
 
 /**
  * Testcase for Category
  */
-class CategoryTest extends \TYPO3\FLOW3\Tests\UnitTestCase {
+class CategoryTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
 	 * @test
