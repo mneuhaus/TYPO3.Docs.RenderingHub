@@ -17,7 +17,7 @@ class JobService {
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Queue\Job\JobManager
+	 * @var \TYPO3\Jobqueue\Common\Job\JobManager
 	 */
 	protected $jobManager;
 
@@ -38,7 +38,7 @@ class JobService {
 	 * Create the right type of job depending on whether the document is a Git or Ter package.
 	 *
 	 * @param \TYPO3\Docs\Domain\Model\Document $document
-	 * @return \TYPO3\Queue\Job\JobInterface
+	 * @return \TYPO3\Jobqueue\Common\Job\JobInterface
 	 */
 	public function create(\TYPO3\Docs\Domain\Model\Document $document) {
 
@@ -53,10 +53,10 @@ class JobService {
 	/**
 	 * Put the job into the queue
 	 *
-	 * @param \TYPO3\Queue\Job\JobInterface $job
+	 * @param \TYPO3\Jobqueue\Common\Job\JobInterface $job
 	 * @return void
 	 */
-	public function queue(\TYPO3\Queue\Job\JobInterface $job) {
+	public function queue(\TYPO3\Jobqueue\Common\Job\JobInterface $job) {
 		// Every object must be persisted prior to be put into the queue.
 		$this->persistenceManager->persistAll();
 		$this->jobManager->queue($job->getIdentifier(), $job);

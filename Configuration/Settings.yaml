@@ -34,11 +34,13 @@ TYPO3:
       # Public path
       publicDir: Web/typo3cms
 
-  Queue:
-    queues:
-      git:
-        className: 'TYPO3\Queue\Beanstalkd\BeanstalkdQueue'
-      ter:
-        className: 'TYPO3\Queue\Beanstalkd\BeanstalkdQueue'
-      sync:
-        className: 'TYPO3\Queue\Beanstalkd\BeanstalkdQueue'
+
+  Jobqueue:
+    Common:
+      queues:
+        git:
+          className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
+        ter:
+          className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
+        sync:
+          className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'

@@ -13,7 +13,7 @@ use TYPO3\Flow\Annotations as Flow;
  * Job to render a single documentation for a Git repository.
 
  */
-class TerDocumentJob implements \TYPO3\Queue\Job\JobInterface {
+class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 
 	/**
 	 * @Flow\Inject
@@ -187,11 +187,11 @@ class TerDocumentJob implements \TYPO3\Queue\Job\JobInterface {
 	 * Execute the job
 	 * A job should finish itself after successful execution using the queue methods.
 	 *
-	 * @param \TYPO3\Queue\QueueInterface $queue
-	 * @param \TYPO3\Queue\Message $message The original message
+	 * @param \TYPO3\Jobqueue\Common\Queue\QueueInterface $queue
+	 * @param \TYPO3\Jobqueue\Common\Queue\Message $message The original message
 	 * @return boolean TRUE if the job was executed successfully and the message should be finished
 	 */
-	public function execute(\TYPO3\Queue\QueueInterface $queue, \TYPO3\Queue\Message $message) {
+	public function execute(\TYPO3\Jobqueue\Common\Queue\QueueInterface $queue, \TYPO3\Jobqueue\Common\Queue\Message $message) {
 		$this->systemLogger->log("Ter: processing {$this->document->getPackageKey()} {$this->document->getVersion()}");
 		$this->initialize();
 		$this->prepareSource();
