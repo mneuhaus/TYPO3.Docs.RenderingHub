@@ -34,11 +34,6 @@ class QueueCommandController extends \TYPO3\Flow\Cli\CommandController {
 	protected $logger;
 
 	/**
-	 * @var array
-	 */
-	protected $settings;
-
-	/**
 	 * @Flow\Inject
 	 * @var \TYPO3\Jobqueue\Common\Queue\QueueManager
 	 */
@@ -51,44 +46,18 @@ class QueueCommandController extends \TYPO3\Flow\Cli\CommandController {
 	protected $queueUtility;
 
 	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
+	 * @var array
 	 */
-	protected $configurationManager;
+	protected $settings;
 
 	/**
-	 * Further object initialization
-	 */
-	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration();
-	}
-
-	/**
-	 * Display a help message
+	 * Settings injection
 	 *
+	 * @param array $settings
 	 * @return void
 	 */
-	public function helpCommand() {
-
-		$message = <<<EOF
-
-Useful commands for handling queue.
-
-Usage:
--------
-
-./flow3 queue:{start | stop | status| restart}
-
-"status" and "stop" commands are self-explanatory. "start" command acts also
-as "keep-a-live" making sure the queue is up. If the queue is down, the command
-will try to re-initialize a process. An email will also be sent to
-maintainers (cf. configuration). A logging file is created at Data/Logs/Queue.*
-
-More help can be found on the Wiki
-http://forge.typo3.org/projects/team-doc-rendering/wiki/Management
-
-EOF;
-		$this->outputLine($message);
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
 	}
 
 	/**

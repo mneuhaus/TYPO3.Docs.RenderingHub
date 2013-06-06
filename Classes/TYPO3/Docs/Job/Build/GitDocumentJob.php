@@ -109,12 +109,6 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
-	 */
-	protected $configurationManager;
-
-	/**
-	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Directory
 	 */
 	protected $directoryFinder;
@@ -126,10 +120,13 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	protected $syncJobService;
 
 	/**
-	 * Further object initialization
+	 * Settings injection
+	 *
+	 * @param array $settings
+	 * @return void
 	 */
-	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration();
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
 	}
 
 	/**

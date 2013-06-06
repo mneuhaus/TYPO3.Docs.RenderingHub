@@ -28,16 +28,13 @@ class SystemLogger {
 	protected $settings;
 
 	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
+	 * Settings injection
+	 *
+	 * @param array $settings
+	 * @return void
 	 */
-	protected $configurationManager;
-
-	/**
-	 * Further object initialization
-	 */
-	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration();
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
 	}
 
 	/**

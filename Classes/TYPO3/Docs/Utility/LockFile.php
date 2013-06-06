@@ -27,20 +27,22 @@ class LockFile {
 	protected $lockFile;
 
 	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
+	 * Settings injection
+	 *
+	 * @param array $settings
+	 * @return void
 	 */
-	protected $configurationManager;
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
+	}
 
 	/**
 	 * Further object initialization
 	 */
 	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration();
-
 		$this->lockFile = $this->settings['lockFile'];
 
-		// Make sure the existing file hierarchy exists
+			// Make sure the existing file hierarchy exists
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($this->settings['buildDir']);
 	}
 

@@ -4,35 +4,34 @@
 
 TYPO3:
   Docs:
-    defaultConfiguration:
-      # Email notification
-      maintainers: [fabien.udriot@typo3.org, martin.bless@typo3.org]
-      sender: no_reply@docs.typo3.org
-      sendEmailForWarningMessage: 1
-      sendEmailForAlertMessage: 1
+    # Email notification
+    maintainers: [fabien.udriot@typo3.org, martin.bless@typo3.org]
+    sender: no_reply@docs.typo3.org
+    sendEmailForWarningMessage: 1
+    sendEmailForAlertMessage: 1
 
-      # Base path configuration
-      sourceDir: Data/Documentation/Source
-      buildDir: Data/Documentation/Build
-      temporaryDir: Data/Temporary/Documentation
-      lockFile: Data/Documentation/lock
+    # Base path configuration
+    sourceDir: Data/Documentation/Source
+    buildDir: Data/Documentation/Build
+    temporaryDir: Data/Temporary/Documentation
+    lockFile: Data/Documentation/lock
 
-      # Ter
-      terUrl: http://typo3.org/fileadmin/ter/
-      terBuildDir: Data/Documentation/Build/typo3cms/Extensions
-      terSourceDir: Data/Documentation/Source/Ter
-      terDatasource: Data/Documentation/Source/Ter/extensions.xml.gz
-      terDatasourceRemote: http://typo3.org/fileadmin/ter/extensions.xml.gz
-      sxw2htmlPath: T3PythonDocBuilderPackage/src/T3PythonDocBuilder
-      sxw2html: t3pdb_sxw2html.py
+    # Ter
+    terUrl: http://typo3.org/fileadmin/ter/
+    terBuildDir: Data/Documentation/Build/typo3cms/Extensions
+    terSourceDir: Data/Documentation/Source/Ter
+    terDatasource: Data/Documentation/Source/Ter/extensions.xml.gz
+    terDatasourceRemote: http://typo3.org/fileadmin/ter/extensions.xml.gz
+    sxw2htmlPath: T3PythonDocBuilderPackage/src/T3PythonDocBuilder
+    sxw2html: t3pdb_sxw2html.py
 
-      # Git
-      gitSourceDir: Data/Documentation/Source/Git
-      gitDatasource: Data/Documentation/Source/Git/packages.json
-      gitDatasourceRemote: http://review.typo3.org/projects/?format=JSON&d
+    # Git
+    gitSourceDir: Data/Documentation/Source/Git
+    gitDatasource: Data/Documentation/Source/Git/packages.json
+    gitDatasourceRemote: http://review.typo3.org/projects/?format=JSON&d
 
-      # Public path
-      publicDir: Web/typo3cms
+    # Public path
+    publicDir: Web/typo3cms
 
 
   Jobqueue:

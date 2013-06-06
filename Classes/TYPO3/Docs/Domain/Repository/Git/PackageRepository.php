@@ -34,12 +34,6 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Configuration\ConfigurationManager
-	 */
-	protected $configurationManager;
-
-	/**
-	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Service\DataSource\GitService
 	 */
 	protected $dataSource;
@@ -57,10 +51,13 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	protected $repositoryFinder;
 
 	/**
-	 * Further object initialization
+	 * Settings injection
+	 *
+	 * @param array $settings
+	 * @return void
 	 */
-	public function initializeObject() {
-		$this->settings = $this->configurationManager->getConfiguration();
+	public function injectSettings(array $settings) {
+		$this->settings = $settings;
 	}
 
 	/**
