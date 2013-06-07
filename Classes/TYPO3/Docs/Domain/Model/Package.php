@@ -93,7 +93,7 @@ class Package {
 		// when data comes directly from the database
 		$data = array_change_key_case($data, CASE_LOWER);
 
-		$this->title = empty($data['title']) ? '' : $data['title'];
+		$this->title = empty($data['title']) ? '[no title given]' : $data['title'];
 		$this->abstract = empty($data['abstract']) ? '' : $data['abstract'];
 		$this->product = empty($data['product']) ? '' : $data['product'];
 		$this->locale = empty($data['locale']) ? '' : $data['locale'];
