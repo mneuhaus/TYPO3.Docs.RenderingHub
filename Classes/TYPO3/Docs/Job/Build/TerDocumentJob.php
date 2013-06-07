@@ -250,7 +250,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	}
 
 	/**
-	 * Should be temporary measure prior to update Make file in package RestTools
+	 * Should be temporary measure prior to update Make file in package TYPO3.RestTools
 	 *
 	 * @return void
 	 */
@@ -311,7 +311,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return string
 	 */
 	protected function getSxw2HtmlCommand() {
-		$package = $this->packageManager->getPackage('RestTools')->getPackagePath();
+		$package = $this->packageManager->getPackage('TYPO3.RestTools')->getPackagePath();
 		$command = sprintf('cd %s; /usr/bin/python %s %s/doc/manual.sxw %s 2>&1 >> %sLogs/sxw2html.log',
 			$package . $this->settings['sxw2htmlPath'],
 			$this->settings['sxw2html'],
