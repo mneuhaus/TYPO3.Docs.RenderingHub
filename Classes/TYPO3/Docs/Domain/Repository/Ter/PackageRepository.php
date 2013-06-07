@@ -74,11 +74,11 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 
 		foreach ($this->findAll() as $package) {
 
-			if ($package->getTitle() == $packageKey) {
+			if ($package->getTitle() === $packageKey) {
 
 				if (empty($version)) {
 					$packages[] = $package;
-				} elseif($package->getVersion() == $version) {
+				} elseif($package->getVersion() === $version) {
 					$packages[] = $package;
 				}
 			}
@@ -209,7 +209,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 
 		$dataUncompressed = gzuncompress($dataRaw);
 
-		if ($md5Hash != md5($dataUncompressed)) {
+		if ($md5Hash !== md5($dataUncompressed)) {
 			$this->systemLogger->log('Ter: T3X archive is corrupted, MD5 hash didn\'t match for file "' . $packageLocalFile . '"', LOG_WARNING);
 			return self::ERRORCODE_T3XARCHIVECORRUPTED;
 		}

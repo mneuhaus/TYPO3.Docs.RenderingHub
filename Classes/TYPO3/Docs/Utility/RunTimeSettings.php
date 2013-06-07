@@ -83,7 +83,7 @@ class RunTimeSettings  {
 	 * @param int $limit
 	 */
 	public function setLimit($limit) {
-		if ($limit != 0) {
+		if ($limit !== 0) {
 			$this->limit = $limit;
 		}
 	}

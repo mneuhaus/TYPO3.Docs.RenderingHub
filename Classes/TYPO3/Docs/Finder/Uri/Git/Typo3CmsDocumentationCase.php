@@ -31,7 +31,7 @@ class Typo3CmsDocumentationCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase 
 		$repositoryUri = ltrim($package->getRepository(), '/');
 		$parts = explode('/', $repositoryUri);
 
-		if ($parts[0] == 'Documentation' && $parts[1] == 'TYPO3') {
+		if ($parts[0] === 'Documentation' && $parts[1] === 'TYPO3') {
 			// Remove the .git suffix
 			$documentBaseName = str_replace('.git', '', array_pop($parts));
 
@@ -48,7 +48,7 @@ class Typo3CmsDocumentationCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase 
 				$languageSegment,
 				$package->getVersion()
 			);
-		} else if ($this->successor != NULL) {
+		} else if ($this->successor !== NULL) {
 
 			$result = $this->successor->handle($package);
 		}

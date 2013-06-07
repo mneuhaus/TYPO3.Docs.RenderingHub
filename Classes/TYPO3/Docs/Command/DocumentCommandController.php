@@ -129,7 +129,7 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 			$repositoryTypes = $this->getRepositoryTypesArguments();
 
-			if ($limit == 0 && !$force) {
+			if ($limit === 0 && !$force) {
 				$message = $this->commandMessage->getImportAllMessage($repositoryTypes);
 
 				if ($message && !Console::askUserValidation($message)) {
@@ -185,7 +185,7 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 				// Action can take a while, adding lock file avoiding concurrent operations
 			$this->lockFile->create();
 
-			if ($limit == 0 && !$force) {
+			if ($limit === 0 && !$force) {
 				$message = $this->commandMessage->getUpdateAllMessage();
 
 				if (!Console::askUserValidation($message)) {

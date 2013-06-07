@@ -200,7 +200,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 			}
 
 			// Default value should be empty
-			if ($document->getUriAlias() != '') {
+			if ($document->getUriAlias() !== '') {
 				$document->setUriAlias('');
 				$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::SYNC);
 				$this->update($document);

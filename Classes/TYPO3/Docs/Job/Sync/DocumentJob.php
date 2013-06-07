@@ -92,7 +92,7 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	public function execute(\TYPO3\Jobqueue\Common\Queue\QueueInterface $queue, \TYPO3\Jobqueue\Common\Queue\Message $message) {
 
 		$documents = $this->documentRepository->findDocumentToBeSync($this->packageKey);
-		if (count($documents) == 0) {
+		if (count($documents) === 0) {
 			$this->systemLogger->log("Sync: nothing to synchronize for package {$this->packageKey}");
 			return TRUE;
 		}
@@ -109,7 +109,7 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 				$this->systemLogger->log("Sync: starting synchronization " . $document->getUri());
 				$this->rsync($buildPath, $document->getUri());
 
-				if ($document->getUriAlias() != '') {
+				if ($document->getUriAlias() !== '') {
 
 					// Get new public path for uri alias
 					$this->systemLogger->log("Sync: starting synchronization for URI alias " . $document->getUri());

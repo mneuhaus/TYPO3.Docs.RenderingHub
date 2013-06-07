@@ -129,7 +129,7 @@ class QueueCommandController extends \TYPO3\Flow\Cli\CommandController {
 	public function statusCommand() {
 
 		$processes = $this->queueUtility->getRunningProcesses($this->queues);
-		if (count($processes) == count($this->queues)) {
+		if (count($processes) === count($this->queues)) {
 
 			$message = sprintf('%s "%s" queues are up on pid "%s".',
 				ColorCli::getColoredString('[OK]', 'green'),
@@ -139,7 +139,7 @@ class QueueCommandController extends \TYPO3\Flow\Cli\CommandController {
 		} elseif (count($processes) > count($this->queues)) {
 			$message = sprintf('%s More queue handlers are running than they should. Try stopping and restarting the queues',
 				ColorCli::getColoredString('[PARTIAL]', 'yellow'));
-		} elseif (count($processes) == 0) {
+		} elseif (count($processes) === 0) {
 			$message = sprintf('%s no queue handler is running.', ColorCli::getColoredString('[KO]', 'red'));
 		} else {
 			$message = sprintf('%s It should be more queue handlers running, check out system processes for further investigation.',

@@ -72,11 +72,11 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 
 		foreach ($this->findAll() as $package) {
 
-			if ($package->getTitle() == $packageKey) {
+			if ($package->getTitle() === $packageKey) {
 
 				if (empty($version)) {
 					$packages[] = $package;
-				} elseif ($package->getVersion() == $version) {
+				} elseif ($package->getVersion() === $version) {
 					$packages[] = $package;
 				}
 			}

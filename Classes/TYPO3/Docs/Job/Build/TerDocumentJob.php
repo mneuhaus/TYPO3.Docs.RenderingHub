@@ -299,7 +299,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			// Persist "manually"
 			$this->persistenceManager->persistAll();
 
-		} elseif ($this->document->getStatus() == \TYPO3\Docs\Utility\StatusMessage::RENDER) { // TRUE when flag "dry-run" is set and new document
+		} elseif ($this->document->getStatus() === \TYPO3\Docs\Utility\StatusMessage::RENDER) { // TRUE when flag "dry-run" is set and new document
 			$this->documentRepository->remove($this->document);
 			$this->persistenceManager->persistAll();
 		}

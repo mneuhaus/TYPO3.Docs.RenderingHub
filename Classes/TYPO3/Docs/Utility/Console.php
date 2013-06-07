@@ -40,7 +40,7 @@ class Console {
 
 		// Read the reply of the User from the console
 		$reply = strtolower(trim(fgets(STDIN)));
-		if ($reply == 'y' || $reply == 'yes') {
+		if ($reply === 'y' || $reply === 'yes') {
 			return TRUE;
 		}
 

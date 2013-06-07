@@ -47,7 +47,7 @@ class Files  {
 
 		$unixTime = 0;
 		foreach ($metaData['wrapper_data'] as $response) {
-			if (substr(strtolower($response), 0, 15) == 'last-modified: ') {
+			if (substr(strtolower($response), 0, 15) === 'last-modified: ') {
 				$unixTime = strtotime(substr($response, 15));
 				break;
 			}
