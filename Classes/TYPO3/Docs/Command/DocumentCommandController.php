@@ -34,6 +34,12 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 	/**
 	 * @Flow\Inject
+	 * @var \TYPO3\Docs\Domain\Repository\PackageRepository
+	 */
+	protected $packageRepository;
+
+	/**
+	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Log\SystemLogger
 	 */
 	protected $systemLogger;
@@ -43,12 +49,6 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 * @var \TYPO3\Docs\Finder\Directory
 	 */
 	protected $directoryFinder;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Utility\CommandMessage
-	 */
-	protected $commandMessage;
 
 	/**
 	 * @Flow\Inject
@@ -130,7 +130,7 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 			$repositoryTypes = $this->getRepositoryTypesArguments();
 
 			if ($limit === 0 && !$force) {
-				$message = $this->commandMessage->getImportAllMessage($repositoryTypes);
+				$message = $this->getImportAllMessage($repositoryTypes);
 
 				if ($message && !Console::askUserValidation($message)) {
 					$this->lockFile->remove();
@@ -161,6 +161,14 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 		if (!$this->lockFile->exists() || $force) {
 
+			if ($limit === 0 && !$force) {
+				$message = $this->getUpdateAllMessage();
+
+				if (!Console::askUserValidation($message)) {
+					$this->quit();
+				}
+			}
+
 			$this->runTimeSettings->setFormats($format);
 			$this->runTimeSettings->setForce($force);
 			$this->runTimeSettings->setDryRun($dryRun);
@@ -168,34 +176,11 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 
 				// Action can take a while, adding lock file avoiding concurrent operations
 			$this->lockFile->create();
-
-			if ($limit === 0 && !$force) {
-				$message = $this->commandMessage->getUpdateAllMessage();
-
-				if (!Console::askUserValidation($message)) {
-					$this->lockFile->remove();
-					$this->quit();
-				}
-			}
-
 			$this->documentRepository->updateAll();
-
-				// remove lock file as a final step
 			$this->lockFile->remove();
 		} else {
 			$this->outputLine('Lock file found, I can not proceed any further. Use option --force to pass me over!');
 		}
-	}
-
-	/**
-	 * Display logging messages with their severity - for testing / debugging purpose
-	 *
-	 * @return void
-	 */
-	public function testLoggingCommand() {
-		$this->systemLogger->log('A message of severity INFO', LOG_INFO);
-		$this->systemLogger->log('A message of severity WARNING -> send an email to ' . $this->settings['maintainers'], LOG_WARNING);
-		$this->systemLogger->log('A message of severity ALERT -> send an email to ' . $this->settings['maintainers'], LOG_ALERT);
 	}
 
 	/**
@@ -221,7 +206,8 @@ EOF;
 		if (Console::askUserValidation($message, $force)) {
 			$documents = $this->documentRepository->findByPackageKey($package);
 			foreach ($documents as $document) {
-					// Remove files
+					// Collect and remove directories
+				$directories = array();
 				$directories[] = $this->directoryFinder->getSource($document);
 				$directories[] = $this->directoryFinder->getBuild($document);
 				foreach ($directories as $directory) {
@@ -258,7 +244,6 @@ EOF;
 		if ($datasource) {
 			$action .= '- remove Git and Ter data-source files' . PHP_EOL;
 		}
-
 
 		$message = <<< EOF
 You are going to perform the following actions:
@@ -298,19 +283,7 @@ EOF;
 	 * @return void
 	 */
 	public function flushAllCommand($force = FALSE) {
-
-		$numberOfDocuments = $this->documentRepository->countAll();
-
-		$message = <<< EOF
-You are going to perform the following actions:
-
-- remove {$numberOfDocuments} document(s) from the database;
-- remove all source files form {$this->settings['sourceDir']};
-- remove all builds from {$this->settings['buildDir']};
-- remove all public files from {$this->settings['publicDir']};
-
-Aye you sure of that?\nPress y or n:
-EOF;
+		$message = $this->getFlushAllMessage();
 
 		if (Console::askUserValidation($message, $force)) {
 			$this->documentRepository->removeAll();
@@ -355,6 +328,18 @@ EOF;
 		}
 	}
 
+
+	/**
+	 * Display logging messages with their severity - for testing / debugging purpose
+	 *
+	 * @return void
+	 */
+	public function testLoggingCommand() {
+		$this->systemLogger->log('A message of severity INFO', LOG_INFO);
+		$this->systemLogger->log('A message of severity WARNING -> send an email to ' . $this->settings['maintainers'], LOG_WARNING);
+		$this->systemLogger->log('A message of severity ALERT -> send an email to ' . $this->settings['maintainers'], LOG_ALERT);
+	}
+
 	/**
 	 * Validate and returns arguments in the range of $this->sources.
 	 *
@@ -377,6 +362,76 @@ EOF;
 		}
 
 		return $arguments;
+	}
+
+	protected function getFlushAllMessage() {
+		return <<< EOF
+You are going to perform the following actions:
+
+- remove {$this->documentRepository->countAll()} document(s) from the database;
+- remove all source files form {$this->settings['sourceDir']};
+- remove all builds from {$this->settings['buildDir']};
+- remove all public files from {$this->settings['publicDir']};
+
+Aye you sure of that?\nPress y or n:
+EOF;
+	}
+
+	/**
+	 * Generates and returns a message to be displayed on the console upon importing all
+	 *
+	 * @param array $repositoryTypes of synchronization.
+	 * @return string
+	 */
+	protected function getImportAllMessage(array $repositoryTypes) {
+
+		$action = $message = '';
+		foreach ($repositoryTypes as $repositoryType) {
+			$numberOfDocuments = $this->packageRepository->countPackageToProcess($repositoryType);
+
+			// Makes sense to only display a message if more than 100 documents
+			if ($numberOfDocuments > 100) {
+				$action .= sprintf("- render %s new document(s) from the %s.typo3.org\n",
+					$numberOfDocuments,
+					$repositoryType
+				);
+			}
+		}
+
+		if ($action) {
+			$message = <<< EOF
+You are going to perform the following actions:
+
+$action
+Note: consider adding a limit if the number of items is too big to avoid the system to run out of memory.
+
+./flow3 document:importall ter --limit 100
+
+Aye you sure of that?\nPress y or n:
+EOF;
+		}
+		return $message;
+	}
+
+	/**
+	 * Generates and returns a message to be displayed on the console upon updating
+	 *
+	 * @return string
+	 */
+	protected function getUpdateAllMessage() {
+
+		$message = <<< EOF
+You are going to perform the following actions:
+
+- update {$this->documentRepository->countAll()} new document(s)
+
+Note: consider adding a limit if the number of items is too big to avoid the system to run out of memory.
+
+./flow3 document:importall ter --limit 100
+
+Aye you sure of that?\nPress y or n:
+EOF;
+		return $message;
 	}
 
 }
