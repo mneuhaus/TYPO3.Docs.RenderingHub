@@ -117,7 +117,7 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 				}
 
 				// Persist document with new status
-				$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::OK);
+				$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_OK);
 				$this->documentRepository->update($document);
 				$this->persistenceManager->persistAll();
 			} else {

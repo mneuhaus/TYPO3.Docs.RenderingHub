@@ -72,12 +72,10 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 */
 	public function findForHomePage() {
 		$query = $this->createQuery();
-		$result = $query
-			->matching($query->logicalNot($query->equals('status', 'documentation-not-found')))
+
+		return $query->matching($query->logicalNot($query->equals('status', \TYPO3\Docs\Domain\Model\Document::STATUS_NOT_FOUND)))
 			->setOrderings(array('repositoryType' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_ASCENDING))
 			->execute();
-
-		return $result;
 	}
 
 	/**
@@ -108,7 +106,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 		return $query->matching(
 			$query->logicalAnd(
 				$query->equals('packageKey', $packageKey),
-				$query->equals('status', \TYPO3\Docs\Utility\StatusMessage::SYNC)
+				$query->equals('status', \TYPO3\Docs\Domain\Model\Document::STATUS_SYNC)
 			)
 		)->execute();
 	}
@@ -177,9 +175,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 * @param string $packageKey
 	 */
 	public function resetUriAlias($packageKey) {
-
 		$documents = $this->findByPackageKey($packageKey);
-
 		$documentWithHighestVersion = '';
 
 		/** @var $document \TYPO3\Docs\Domain\Model\Document */
@@ -196,7 +192,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 			// Default value should be empty
 			if ($document->getUriAlias() !== '') {
 				$document->setUriAlias('');
-				$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::SYNC);
+				$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_SYNC);
 				$this->update($document);
 			}
 		}
@@ -252,7 +248,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 		/** @var $document \TYPO3\Docs\Domain\Model\Document */
 		foreach ($documents as $document) {
 
-			$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::RENDER);
+			$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
 			$this->documentRepository->update($document);
 			$message = sprintf('%s: updating new document object %s', ucfirst($document->getRepositoryType()), $document->getUri());
 			$this->systemLogger->log($message, LOG_INFO);

@@ -342,8 +342,8 @@ EOF;
 
 		$arrayOfStatus = array(
 			'',
-			\TYPO3\Docs\Utility\StatusMessage::RENDER,
-			\TYPO3\Docs\Utility\StatusMessage::SYNC,
+			\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER,
+			\TYPO3\Docs\Domain\Model\Document::STATUS_SYNC,
 		);
 
 		foreach ($arrayOfStatus as $status) {

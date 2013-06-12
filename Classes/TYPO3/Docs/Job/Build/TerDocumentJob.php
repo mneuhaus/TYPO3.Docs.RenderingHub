@@ -195,7 +195,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 
 		// @todo implement the chain of responsibility pattern for this row of "if"
 		if (file_exists($this->inputDirectory . '/Documentation/Index.rst')) {
-			$this->status = \TYPO3\Docs\Utility\StatusMessage::SYNC;
+			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_SYNC;
 			// @todo call Martin's script 1
 			$this->systemLogger->log('not implemented!!! - Ter: rendering completed for document ' . $this->document->getUri(), LOG_INFO);
 
@@ -208,7 +208,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			$this->syncJobService->queue($job);
 
 		} else {
-			$this->status = \TYPO3\Docs\Utility\StatusMessage::NOT_FOUND;
+			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_NOT_FOUND;
 			\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->outputDirectory); # Clean up file structure
 			$this->systemLogger->log('Ter: nothing to render for document ' . $this->document->getUri(), LOG_INFO);
 		}
@@ -241,7 +241,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			$this->systemLogger->log('     -> temporary files located at ' . $this->makeDirectory, LOG_INFO);
 			$this->sendAlertToMaintainers();
 
-			$this->status = \TYPO3\Docs\Utility\StatusMessage::SYNC;
+			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_SYNC;
 		} else {
 			\TYPO3\Docs\Utility\Console::output($this->getSxw2HtmlCommand());
 			\TYPO3\Docs\Utility\Console::output($this->getMakeCleanCommand());
@@ -299,7 +299,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			// Persist "manually"
 			$this->persistenceManager->persistAll();
 
-		} elseif ($this->document->getStatus() === \TYPO3\Docs\Utility\StatusMessage::RENDER) { // TRUE when flag "dry-run" is set and new document
+		} elseif ($this->document->getStatus() === \TYPO3\Docs\Domain\Model\Document::STATUS_RENDER) { // TRUE when flag "dry-run" is set and new document
 			$this->documentRepository->remove($this->document);
 			$this->persistenceManager->persistAll();
 		}

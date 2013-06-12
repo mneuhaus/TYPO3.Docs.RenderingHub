@@ -61,7 +61,7 @@ class TerService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 		$document = new \TYPO3\Docs\Domain\Model\Document();
 		$document->setTitle($package->getTitle());
 		$document->setAbstract($package->getAbstract());
-		$document->setStatus(\TYPO3\Docs\Utility\StatusMessage::RENDER);
+		$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
 		$document->setType($package->getType());
 		$document->setGenerationDate(new \DateTime('now'));
 		$document->setVersion($package->getVersion());

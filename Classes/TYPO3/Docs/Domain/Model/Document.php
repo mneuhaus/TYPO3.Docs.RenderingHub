@@ -17,6 +17,14 @@ use Doctrine\ORM\Mapping as ORM;
 class Document {
 
 	/**
+	 * @var string
+	 */
+	const STATUS_RENDER = 'waiting-rendering';
+	const STATUS_OK = 'OK';
+	const STATUS_SYNC = 'waiting-sync';
+	const STATUS_NOT_FOUND = 'documentation-not-found';
+
+	/**
 	 * Title of the document
 	 *
 	 * @var string
@@ -543,15 +551,15 @@ class Document {
 	 * @return boolean
 	 */
 	public function getIsOk() {
-		return $this->getStatus() === \TYPO3\Docs\Utility\StatusMessage::OK;
+		return $this->getStatus() === self::STATUS_OK;
 	}
 
 	/**
 	 * @return boolean
 	 */
 	public function getIsProcessing() {
-		return $this->getStatus() === \TYPO3\Docs\Utility\StatusMessage::RENDER ||
-			$this->getStatus() === \TYPO3\Docs\Utility\StatusMessage::SYNC;
+		return $this->getStatus() === self::STATUS_RENDER ||
+			$this->getStatus() === self::STATUS_SYNC;
 	}
 }
 

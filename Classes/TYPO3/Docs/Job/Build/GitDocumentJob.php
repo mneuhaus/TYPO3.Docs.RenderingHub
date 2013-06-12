@@ -187,7 +187,7 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			$this->syncJobService->queue($job);
 
 		} else {
-			$this->status = \TYPO3\Docs\Utility\StatusMessage::NOT_FOUND;
+			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_NOT_FOUND;
 			\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->outputDirectory); # Clean up file structure
 			$this->systemLogger->log('Git: nothing to render for document ' . $this->document->getUri(), LOG_INFO);
 		}
@@ -217,7 +217,7 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			$this->sendWarningToAuthors();
 			$this->sendAlertToMaintainers();
 
-			$this->status = \TYPO3\Docs\Utility\StatusMessage::SYNC;
+			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_SYNC;
 		} else {
 			\TYPO3\Docs\Utility\Console::output($this->getMakeCleanCommand());
 			\TYPO3\Docs\Utility\Console::output($this->getMakeHtmlCommand());
@@ -286,7 +286,7 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 
 			// Clean up file structure
 			#\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->temporaryDirectory);
-		} elseif ($this->document->getStatus() === \TYPO3\Docs\Utility\StatusMessage::RENDER) { // TRUE when flag "dry-run" is set and new document
+		} elseif ($this->document->getStatus() === \TYPO3\Docs\Domain\Model\Document::STATUS_RENDER) { // TRUE when flag "dry-run" is set and new document
 			$this->documentRepository->remove($this->document);
 			$this->persistenceManager->persistAll();
 		}
