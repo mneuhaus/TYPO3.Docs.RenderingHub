@@ -23,12 +23,6 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	protected $uriFinder;
 
 	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Service\ImportService
-	 */
-	protected $importService;
-
-	/**
 	 * A reference to the Object Manager
 	 *
 	 * @Flow\Inject
@@ -210,11 +204,9 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 * @param string $version the package name
 	 * @return void
 	 */
-	public function importByRepositoryType($repositoryType, $package, $version) {
-		/** @var $strategyInterface \TYPO3\Docs\Service\Import\StrategyInterface */
-		$strategyInterface = 'Import\\' . ucfirst($repositoryType) . 'Strategy';
-		$this->importService->setStrategy($strategyInterface)
-			->import($package, $version);
+	public function importByRepositoryType($repositoryType, $packageKey, $version) {
+		$strategyClassName = 'TYPO3\Docs\Service\Import\\' . ucfirst($repositoryType) . 'Strategy';
+		$this->objectManager->get($strategyClassName)->import($packageKey, $version);
 	}
 
 	/**
@@ -224,13 +216,8 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 * @return void
 	 */
 	public function importAllByRepositoryType($repositoryType) {
-		$strategyInterfaceName = 'TYPO3\Docs\Service\Import\\' . ucfirst($repositoryType) . 'Strategy';
-
-		/** @var $strategyInterface \TYPO3\Docs\Service\Import\StrategyInterface */
-		$strategyInterface = $this->objectManager->get($strategyInterfaceName);
-
-		$this->importService->setStrategy($strategyInterface)
-			->importAll();
+		$strategyClassName = 'TYPO3\Docs\Service\Import\\' . ucfirst($repositoryType) . 'Strategy';
+		$this->objectManager->get($strategyClassName)->importAll();
 	}
 
 	/**
