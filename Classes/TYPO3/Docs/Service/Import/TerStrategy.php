@@ -30,12 +30,6 @@ class TerStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Controller\DocumentController
-	 */
-	protected $documentController;
-
-	/**
-	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Finder\Uri
 	 */
 	protected $uriFinder;

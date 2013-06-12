@@ -149,22 +149,6 @@ class DocumentCommandController extends \TYPO3\Flow\Cli\CommandController {
 	}
 
 	/**
-	 * Update rendering for a specific documents.
-	 *
-	 * The command also accept a "version" parameter, for rendering a specific version. Unless this parameter is
-	 * transmitted, all versions of the package will be rendered e.g 1.0.0, 1.1.0, master, ....
-	 *
-	 * @param string $package the package name to be rendered
-	 * @param string $version the version number
-	 * @param string $format comma separated list of format: html,pdf,...
-	 * @param boolean $dryRun tell whether to set the dry - run flag
-	 * @return void
-	 */
-	public function updateCommand($package, $version = '', $format = 'html', $dryRun = FALSE) {
-		// @todo
-	}
-
-	/**
 	 * Update rendering for all documents.
 	 *
 	 * @param integer $limit to prevent exceeding the memory

@@ -72,12 +72,6 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 */
 	public function findForHomePage() {
 		$query = $this->createQuery();
-//		return $query->matching(
-//			$query->logicalAnd(
-//				$query->like('repository', '/Documentation/TYPO3/%'),
-//				$query->equals('repositoryType', 'git')
-//			)
-//		)
 		$result = $query
 			->matching($query->logicalNot($query->equals('status', 'documentation-not-found')))
 			->setOrderings(array('repositoryType' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_ASCENDING))

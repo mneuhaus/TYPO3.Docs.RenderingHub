@@ -30,26 +30,6 @@ class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
 		$this->view->assign('documents', $this->documentRepository->findForHomePage());
 	}
 
-	/**
-	 * Render action
-	 *
-	 * @param string $origin a Git Origin
-	 * @param string $repositoryType possible values are git, svn, ter
-	 * @param string $branch
-	 * @return void
-	 */
-	public function renderAction($origin = '', $repositoryType = 'git', $branch = 'master') {
-		// Register
-		#$this->gitDocumentCommandController->addCommand($origin);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function redirectAction() {
-		$this->redirect('Index');
-	}
-
 }
 
 ?>
