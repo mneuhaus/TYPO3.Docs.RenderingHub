@@ -14,7 +14,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository {
+class PackageRepository {
 
 	const ERRORCODE_ERRORWHILEREADINGT3XFILE = 'can-not-read-t3x';
 

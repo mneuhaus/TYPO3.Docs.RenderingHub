@@ -14,7 +14,9 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository {
+class PackageRepository {
+
+	const ENTITY_CLASSNAME = 'TYPO3\Docs\Domain\Model\Package';
 
 	/**
 	 * @Flow\Inject
