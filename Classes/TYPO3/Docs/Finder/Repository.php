@@ -33,19 +33,6 @@ class Repository implements \TYPO3\Docs\Finder\Repository\FinderInterface {
 	}
 
 	/**
-	 * Returns an URL of a repository given repository uri
-	 *
-	 * @param string $repositoryUri
-	 * @return string the URI
-	 */
-	public function getRepositoryUrl($repositoryUri) {
-		// @todo not the final implementation, just a quick one 07.12.12 during typo3.org sprint. Let see if another
-		// Github servier or whatever needs such method
-		return 'git://git.typo3.org' . $repositoryUri;
-	}
-
-
-	/**
 	 * Returns the proper finder for a package
 	 *
 	 * @param \TYPO3\Docs\Domain\Model\Package $package

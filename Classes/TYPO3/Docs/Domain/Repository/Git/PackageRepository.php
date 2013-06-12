@@ -45,12 +45,6 @@ class PackageRepository {
 	protected $packageRepository;
 
 	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Finder\Repository
-	 */
-	protected $repositoryFinder;
-
-	/**
 	 * Settings injection
 	 *
 	 * @param array $settings
@@ -176,19 +170,16 @@ class PackageRepository {
 	 * @return boolean TRUE if the command has return no warning
 	 */
 	public function fetch($sourceDirectory, $repositoryUri) {
-
-		$repositoryUrl = $this->repositoryFinder->getRepositoryUrl($repositoryUri);
-
 		$sourceDirectoryForLog = str_replace(FLOW_PATH_DATA, '', $sourceDirectory);
 		$files = glob($sourceDirectory . '/.git/*');
 
 		// TRUE means this is a new repository
 		if (empty($files)) {
 			$this->systemLogger->log('Git: cloning repository ' . $sourceDirectoryForLog, LOG_INFO);
-			$command = "cd {$sourceDirectory}; git clone --quiet {$repositoryUrl} .";
+			$command = "cd {$sourceDirectory}; git clone --quiet {$repositoryUri} .";
 			$result = \TYPO3\Docs\Utility\Console::run($command);
 		} else {
-			$this->systemLogger->log('Git: pulling remote ' . $repositoryUrl, LOG_INFO);
+			$this->systemLogger->log('Git: pulling remote ' . $repositoryUri, LOG_INFO);
 			$command = "cd {$sourceDirectory}; git checkout --quiet --force master";
 			\TYPO3\Docs\Utility\Console::run($command);
 

@@ -47,9 +47,6 @@ class GitService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 	 * @return \TYPO3\Docs\Domain\Model\Document
 	 */
 	public function create(\TYPO3\Docs\Domain\Model\Package $package) {
-
-		$uri = $this->uriFinder->getUri($package);
-
 		$document = new \TYPO3\Docs\Domain\Model\Document();
 		$document->setTitle($package->getTitle());
 		$document->setAbstract($package->getAbstract());
@@ -62,12 +59,12 @@ class GitService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 		$document->setRepository($package->getRepository());
 		$document->setRepositoryTag($package->getRepositoryTag());
 		$document->setPackageKey($package->getPackageKey());
-		$document->setUri($uri);
+		$document->setUri($package->getUri());
 		$document->setRepositoryType($package->getRepositoryType());
 
-		// Insert the document in the database
+			// Insert the document in the database
 		$this->documentRepository->add($document);
-		$this->systemLogger->log('Git: added new document object ' . $uri, LOG_INFO);
+		$this->systemLogger->log('Git: added new document object for ' . $package->getUri(), LOG_INFO);
 
 		return $document;
 	}

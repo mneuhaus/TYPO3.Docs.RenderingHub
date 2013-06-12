@@ -103,7 +103,7 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 		$content = file_get_contents($this->settings['gitDatasourceRemote']);
 
 		// There is a bug in the JSON output
-		// @see http://review.coreboot.org/Documentation/rest-api.html
+		// @see http://review.typo3.org/Documentation/rest-api.html
 		if (strpos($content, ")]}'") === 0) {
 			$content = str_replace(")]}'", '', $content);
 		}
@@ -117,44 +117,43 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 			$packageKey = '/' . ltrim($packageKey, '/');
 
 			$packagesParts = \TYPO3\Flow\Utility\Arrays::trimExplode('/', $packageKey);
-			$repositoryUri = $packageKey . '.git';
-			$repositoryUrl = $this->repositoryFinder->getRepositoryUrl($repositoryUri);
+			$repositoryUri = 'git://git.typo3.org' . $packageKey . '.git';
 
 			// TRUE for official TYPO3 documentation
 			if (preg_match('/^\/Documentation\/TYPO3/is', $packageKey)) {
 
 				$cachePackages[] = array(
-					'product' => 'TYPO3',
+					'product' => 'TYPO3 CMS',
 					'language' => 'us_US',
 					'type' => strtolower($packagesParts[2]),
 					'packageKey' => $packagesParts[3] . $packagesParts[2],
 					'uri' => '/TYPO3/' . $packagesParts[3] . $packagesParts[2],
 					'repository' => $repositoryUri,
-					'versions' => $this->getRepositoryTags($repositoryUrl),
+					'versions' => $this->getRepositoryTags($repositoryUri),
 				);
 			} // TRUE for TYPO3 extensions
 			elseif (preg_match('/^\/TYPO3v4\/Extensions/is', $packageKey)) {
 
 				$cachePackages[] = array(
-					'product' => 'TYPO3',
+					'product' => 'TYPO3 CMS',
 					'language' => 'us_US',
 					'type' => 'manual',
 					'packageKey' => $packagesParts[2],
 					'uri' => '/TYPO3/Extensions/' . $packagesParts[2],
 					'repository' => $repositoryUri,
-					'versions' => $this->getRepositoryTags($repositoryUrl, $onlyMaterBranch = TRUE),
+					'versions' => $this->getRepositoryTags($repositoryUri),
 				);
-			} // TRUE for FLOW3 packages
+			} // TRUE for TYPO3 Flow packages
 			elseif (preg_match('/^\/FLOW3\/Packages/is', $packageKey)) {
 
 				$cachePackages[] = array(
-					'product' => 'Flow',
+					'product' => 'TYPO3 Flow',
 					'language' => 'us_US',
 					'type' => 'manual',
 					'packageKey' => $packagesParts[2],
-					'uri' => '/FLOW3/Packages/' . $packagesParts[2],
+					'uri' => '/Flow/Packages/' . $packagesParts[2],
 					'repository' => $repositoryUri,
-					'versions' => $this->getRepositoryTags($repositoryUrl),
+					'versions' => $this->getRepositoryTags($repositoryUri),
 				);
 			}
 		}
@@ -167,16 +166,15 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 	 * Query the remote Git repository and compute tags that will become version
 	 *
 	 * @param string $repositoryUrl
-	 * @param bool $onlyMaterBranch if FALSE will not check for tags
+	 * @param bool $onlyMasterBranch if FALSE will not check for tags
 	 * @return array
 	 */
-	public function getRepositoryTags($repositoryUrl, $onlyMaterBranch = FALSE) {
+	public function getRepositoryTags($repositoryUrl, $onlyMasterBranch = FALSE) {
 
 		// Reset variable (given by reference)
 		$versions['master'] = 'master';
 
-		if (!$onlyMaterBranch) {
-
+		if (!$onlyMasterBranch) {
 			$command = sprintf('git ls-remote %s 2>&1', $repositoryUrl);
 			exec($command, $tags, $errorCode);
 
