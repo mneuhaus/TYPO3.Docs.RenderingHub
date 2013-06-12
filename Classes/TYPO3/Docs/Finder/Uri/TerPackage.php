@@ -23,9 +23,7 @@ class TerPackage implements FinderInterface {
 	 * @return string the URI
 	 */
 	public function getUri(\TYPO3\Docs\Domain\Model\Package $package) {
-		$fallBackCase = new \TYPO3\Docs\Finder\Uri\Ter\FallBackCase();
-
-		return $fallBackCase->handle($package);
+		return sprintf('/typo3cms/extensions/%s/%s', $package->getPackageKey(), $package->getVersion());
 	}
 }
 ?>

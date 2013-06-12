@@ -12,21 +12,13 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Class dealing with Uri coming from Git packages
  */
-class Typo3CmsDocumentationCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase {
-
-	/**
-	 * @param \TYPO3\Docs\Finder\Uri\Git\AbstractCase $nextCase
-	 * @return void
-	 */
-	public function setSuccessor(\TYPO3\Docs\Finder\Uri\Git\AbstractCase $nextCase) {
-		$this->successor = $nextCase;
-	}
+class Typo3CmsDocumentationCase extends \TYPO3\Docs\Finder\Uri\AbstractCase {
 
 	/**
 	 * @param \TYPO3\Docs\Domain\Model\Package $package
 	 * @return string
 	 */
-	public function handle($package) {
+	public function handle(\TYPO3\Docs\Domain\Model\Package $package) {
 
 		$repositoryUri = ltrim($package->getRepository(), '/');
 		$parts = explode('/', $repositoryUri);
@@ -48,10 +40,10 @@ class Typo3CmsDocumentationCase extends \TYPO3\Docs\Finder\Uri\Git\AbstractCase 
 				$languageSegment,
 				$package->getVersion()
 			);
-		} else if ($this->successor !== NULL) {
-
-			$result = $this->successor->handle($package);
+		} else {
+			$result = $this->proceed($package);
 		}
+
 		return $result;
 	}
 }

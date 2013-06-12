@@ -14,7 +14,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class File implements \TYPO3\Docs\Finder\File\FinderInterface {
+class File {
 
 	/**
 	 * @var array
