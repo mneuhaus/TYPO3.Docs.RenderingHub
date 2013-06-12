@@ -11,23 +11,23 @@ TYPO3:
     sendEmailForAlertMessage: 1
 
     # Base path configuration
-    sourceDir: Data/Documentation/Source
-    buildDir: Data/Documentation/Build
-    temporaryDir: Data/Temporary/Documentation
-    lockFile: Data/Documentation/lock
+    sourceDir: %FLOW_PATH_DATA%Documentation/Source
+    buildDir: %FLOW_PATH_DATA%Documentation/Build
+    temporaryDir: %FLOW_PATH_DATA%Temporary/Documentation
+    lockFile: %FLOW_PATH_DATA%Documentation/lock
 
     # Ter
     terUrl: http://typo3.org/fileadmin/ter/
-    terBuildDir: Data/Documentation/Build/typo3cms/Extensions
-    terSourceDir: Data/Documentation/Source/Ter
-    terDatasource: Data/Documentation/Source/Ter/extensions.xml.gz
+    terBuildDir: %FLOW_PATH_DATA%Documentation/Build/typo3cms/Extensions
+    terSourceDir: %FLOW_PATH_DATA%Documentation/Source/Ter
+    terDatasource: %FLOW_PATH_DATA%Documentation/Source/Ter/extensions.xml.gz
     terDatasourceRemote: http://typo3.org/fileadmin/ter/extensions.xml.gz
     sxw2htmlPath: T3PythonDocBuilderPackage/src/T3PythonDocBuilder
     sxw2html: t3pdb_sxw2html.py
 
     # Git
-    gitSourceDir: Data/Documentation/Source/Git
-    gitDatasource: Data/Documentation/Source/Git/packages.json
+    gitSourceDir: %FLOW_PATH_DATA%Documentation/Source/Git
+    gitDatasource: %FLOW_PATH_DATA%Documentation/Source/Git/packages.json
     gitDatasourceRemote: http://review.typo3.org/projects/?format=JSON&d
 
     # Public path

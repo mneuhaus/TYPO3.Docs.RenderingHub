@@ -230,7 +230,6 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return void
 	 */
 	protected function sendWarningToAuthors() {
-
 		if (file_exists($this->warningFile) && filesize($this->warningFile) > 0) {
 
 			// Computes variables
@@ -254,18 +253,20 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return void
 	 */
 	protected function sendAlertToMaintainers() {
-		$content = file_get_contents($this->warningFile);
+		if (file_exists($this->warningFile) && filesize($this->warningFile) > 0) {
+			$content = file_get_contents($this->warningFile);
 
-		// Detect string "Exception occurred" in Warnings file
-		if (preg_match('/Exception/isU', $content)) {
-			$_content = "Something went wrong when rendering \"{$this->document->getPackageKey()}\" version \"{$this->document->getVersion()}\":\n";
-			$_content .= "- target document located at {$this->outputDirectory}\n";
-			$_content .= "- source files located at {$this->inputDirectory}\n";
-			$_content .= "- temporary files located at {$this->temporaryDirectory}\n\n";
-			$_content .= "Server sending the message: " . gethostname() . "\n\n";
+			// Detect string "Exception occurred" in Warnings file
+			if (preg_match('/Exception/isU', $content)) {
+				$_content = "Something went wrong when rendering \"{$this->document->getPackageKey()}\" version \"{$this->document->getVersion()}\":\n";
+				$_content .= "- target document located at {$this->outputDirectory}\n";
+				$_content .= "- source files located at {$this->inputDirectory}\n";
+				$_content .= "- temporary files located at {$this->temporaryDirectory}\n\n";
+				$_content .= "Server sending the message: " . gethostname() . "\n\n";
 
-			$this->systemLogger->log($_content . chr(10) . $content, LOG_ALERT);
-			$this->systemLogger->log('This message seems serious, an email was sent to the maintainers', LOG_INFO);
+				$this->systemLogger->log($_content . chr(10) . $content, LOG_ALERT);
+				$this->systemLogger->log('This message seems serious, an email was sent to the maintainers', LOG_INFO);
+			}
 		}
 	}
 
@@ -300,8 +301,8 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	protected function writeMakeFile() {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
 		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/Makefile.fluid');
-		$view->assign('inputDirectory', FLOW_PATH_ROOT . $this->inputDirectory . '/Documentation');
-		$view->assign('outputDirectory', FLOW_PATH_ROOT . $this->outputDirectory);
+		$view->assign('inputDirectory', $this->inputDirectory . '/Documentation');
+		$view->assign('outputDirectory', $this->outputDirectory);
 		file_put_contents($this->temporaryDirectory . '/Makefile', $view->render());
 	}
 
@@ -314,7 +315,7 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
 		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/conf.py.fluid');
 		$view->assign('inputDirectory', $this->inputDirectory);
-		$view->assign('outputDirectory', FLOW_PATH_ROOT . $this->outputDirectory);
+		$view->assign('outputDirectory', $this->outputDirectory);
 		file_put_contents($this->temporaryDirectory . '/conf.py', $view->render());
 	}
 
@@ -324,10 +325,8 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return string
 	 */
 	protected function getMakeCleanCommand() {
-		$command = sprintf('cd %s%s; make clean --quiet',
-			FLOW_PATH_ROOT,
-			$this->temporaryDirectory,
-			FLOW_PATH_DATA
+		$command = sprintf('cd %s; make clean --quiet',
+			$this->temporaryDirectory
 		);
 		return $command;
 	}
@@ -338,10 +337,9 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return string
 	 */
 	protected function getMakeHtmlCommand() {
-		$command = sprintf('cd %s%s; make html --quiet 2> %s',
-			FLOW_PATH_ROOT,
+		$command = sprintf('cd %s; make html --quiet 2> %s',
 			$this->temporaryDirectory,
-			FLOW_PATH_ROOT . $this->warningFile
+			$this->warningFile
 		);
 		return $command;
 	}

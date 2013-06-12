@@ -157,12 +157,9 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return void
 	 */
 	protected function initialize() {
-
 		$this->inputDirectory = $this->directoryFinder->getSource($this->document);
 		$this->outputDirectory = $this->directoryFinder->getBuild($this->document);
 
-		// @todo when extension will contain docs in directory "Documentation"
-		//$this->temporaryDirectory = $this->directoryFinder::getTemporary($this->document);
 		$this->makeDirectory = $this->outputDirectory . '/t3pdb/Documentation/_make';
 		$this->warningFile = $this->makeDirectory . "/Warnings.txt";
 	}
@@ -193,23 +190,18 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 		$this->initialize();
 		$this->prepareSource();
 
-		// @todo implement the chain of responsibility pattern for this row of "if"
 		if (file_exists($this->inputDirectory . '/Documentation/Index.rst')) {
 			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_SYNC;
 			// @todo call Martin's script 1
 			$this->systemLogger->log('not implemented!!! - Ter: rendering completed for document ' . $this->document->getUri(), LOG_INFO);
-
 		} elseif (file_exists($this->inputDirectory . '/doc/manual.sxw')) {
-
 			$this->renderLegacyDocumentAndLog();
 
-			// Create a new job for synchronizing files
 			$job = $this->syncJobService->create($this->document->getPackageKey());
 			$this->syncJobService->queue($job);
-
 		} else {
 			$this->status = \TYPO3\Docs\Domain\Model\Document::STATUS_NOT_FOUND;
-			\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->outputDirectory); # Clean up file structure
+			\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($this->outputDirectory);
 			$this->systemLogger->log('Ter: nothing to render for document ' . $this->document->getUri(), LOG_INFO);
 		}
 
@@ -257,9 +249,10 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	protected function overwriteMake() {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
 		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/Makefile.legacy.fluid');
+		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($this->makeDirectory);
 
-		$makeFile = $this->makeDirectory . '/Makefile';
-		file_put_contents($makeFile, $view->render());
+		$makeFilePathAndFilename = $this->makeDirectory . '/Makefile';
+		file_put_contents($makeFilePathAndFilename, $view->render());
 	}
 
 	/**
@@ -268,19 +261,22 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return void
 	 */
 	protected function sendAlertToMaintainers() {
-		$content = file_get_contents($this->warningFile);
+		if (file_exists($this->warningFile) && filesize($this->warningFile) > 0) {
+			$content = file_get_contents($this->warningFile);
 
-		// Detect string "Exception occurred" in Warnings file
-		if (preg_match('/Exception/isU', $content)) {
-			$_content = "Something went wrong when rendering \"{$this->document->getPackageKey()}\" version \"{$this->document->getVersion()}\":\n";
-			$_content .= "- target document located at {$this->outputDirectory}\n";
-			$_content .= "- source files located at {$this->inputDirectory}\n";
-			$_content .= "- temporary files located at {$this->temporaryDirectory}\n\n";
-			$_content .= "Server sending the message: " . gethostname() . "\n\n";
+			// Detect string "Exception occurred" in Warnings file
+			if (preg_match('/Exception/isU', $content)) {
+				$_content = "Something went wrong when rendering \"{$this->document->getPackageKey()}\" version \"{$this->document->getVersion()}\":\n";
+				$_content .= "- target document located at {$this->outputDirectory}\n";
+				$_content .= "- source files located at {$this->inputDirectory}\n";
+				$_content .= "- temporary files located at {$this->temporaryDirectory}\n\n";
+				$_content .= "Server sending the message: " . gethostname() . "\n\n";
 
-			$this->systemLogger->log($_content . chr(10) . $content, LOG_ALERT);
-			$this->systemLogger->log('This message seems serious, an email was sent to the maintainers', LOG_INFO);
+				$this->systemLogger->log($_content . chr(10) . $content, LOG_ALERT);
+				$this->systemLogger->log('This message seems serious, an email was sent to the maintainers', LOG_INFO);
+			}
 		}
+
 	}
 
 	/**
@@ -315,8 +311,8 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 		$command = sprintf('cd %s; /usr/bin/python %s %s/doc/manual.sxw %s 2>&1 >> %sLogs/sxw2html.log',
 			$package . $this->settings['sxw2htmlPath'],
 			$this->settings['sxw2html'],
-			FLOW_PATH_ROOT . $this->inputDirectory,
-			FLOW_PATH_ROOT . $this->outputDirectory,
+			$this->inputDirectory,
+			$this->outputDirectory,
 			FLOW_PATH_DATA);
 
 		return $command;
@@ -328,8 +324,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return string the command
 	 */
 	protected function getMakeCleanCommand() {
-		$command = sprintf('cd %s%s; make clean --quiet',
-			FLOW_PATH_ROOT,
+		$command = sprintf('cd %s; make clean --quiet',
 			$this->makeDirectory
 		);
 		return $command;
@@ -341,10 +336,8 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return string the command
 	 */
 	protected function getMakeHtmlCommand() {
-		$command = sprintf('cd %s%s; make html --quiet 2> %s%s',
-			FLOW_PATH_ROOT,
+		$command = sprintf('cd %s; make html --quiet 2> %s',
 			$this->makeDirectory,
-			FLOW_PATH_ROOT,
 			$this->warningFile
 		);
 		return $command;
