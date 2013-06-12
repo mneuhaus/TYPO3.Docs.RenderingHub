@@ -6,6 +6,7 @@ namespace TYPO3\Docs\Domain\Repository;
  *                                                                        *
  *                                                                        */
 
+use TYPO3\Docs\Domain\Model\Document;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
@@ -20,12 +21,6 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 * @var \TYPO3\Docs\Finder\Uri
 	 */
 	protected $uriFinder;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
-	 */
-	protected $documentRepository;
 
 	/**
 	 * @Flow\Inject
@@ -73,9 +68,27 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	public function findForHomePage() {
 		$query = $this->createQuery();
 
-		return $query->matching($query->logicalNot($query->equals('status', \TYPO3\Docs\Domain\Model\Document::STATUS_NOT_FOUND)))
+		return $query->matching($query->logicalNot($query->equals('status', Document::STATUS_NOT_FOUND)))
 			->setOrderings(array('repositoryType' => \TYPO3\Flow\Persistence\QueryInterface::ORDER_ASCENDING))
 			->execute();
+	}
+
+	/**
+	 * Find documents to be sync.
+	 * This corresponds to documents having the status "waiting-sync"
+	 *
+	 * @param string $packageKey
+	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
+	 */
+	public function findDocumentsWaitingToBeSynced($packageKey) {
+		$query = $this->createQuery();
+
+		return $query->matching(
+			$query->logicalAnd(
+				$query->equals('packageKey', $packageKey),
+				$query->equals('status', Document::STATUS_SYNC)
+			)
+		)->execute();
 	}
 
 	/**
@@ -86,27 +99,11 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 */
 	public function findTerDocumentsByStatus($status) {
 		$query = $this->createQuery();
+
 		return $query->matching(
 			$query->logicalAnd(
 				$query->equals('status', $status),
 				$query->equals('repositoryType', 'ter')
-			)
-		)->execute();
-	}
-
-	/**
-	 * Find documents to be sync.
-	 * This corresponds to documents having the status "waiting-sync"
-	 *
-	 * @param string $packageKey
-	 * @return \TYPO3\Flow\Persistence\QueryResultInterface
-	 */
-	public function findDocumentToBeSync($packageKey) {
-		$query = $this->createQuery();
-		return $query->matching(
-			$query->logicalAnd(
-				$query->equals('packageKey', $packageKey),
-				$query->equals('status', \TYPO3\Docs\Domain\Model\Document::STATUS_SYNC)
 			)
 		)->execute();
 	}
@@ -134,8 +131,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 				$query->equals('status', $status),
 				$query->equals('repositoryType', 'git')
 			)
-		)
-		->execute();
+		)->execute();
 	}
 
 	/**
@@ -156,7 +152,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 */
 	public function exists($uri) {
 		$document = $this->findOneByUri($uri);
-		return $document instanceof \TYPO3\Docs\Domain\Model\Document;
+		return $document instanceof Document;
 	}
 
 	/**
@@ -165,8 +161,8 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 * @param string $uri the uri of a document
 	 * @return boolean
 	 */
-	public function NotExists($uri) {
-		return ! $this->exists($uri);
+	public function notExists($uri) {
+		return !$this->exists($uri);
 	}
 
 	/**
@@ -178,7 +174,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 		$documents = $this->findByPackageKey($packageKey);
 		$documentWithHighestVersion = '';
 
-		/** @var $document \TYPO3\Docs\Domain\Model\Document */
+		/** @var $document Document */
 		foreach ($documents as $document) {
 
 			if (!$documentWithHighestVersion) {
@@ -192,7 +188,7 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 			// Default value should be empty
 			if ($document->getUriAlias() !== '') {
 				$document->setUriAlias('');
-				$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_SYNC);
+				$document->setStatus(Document::STATUS_SYNC);
 				$this->update($document);
 			}
 		}
@@ -243,13 +239,13 @@ class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
 	 * @return void
 	 */
 	public function updateAll() {
-		$documents = $this->documentRepository->findAll();
+		$documents = $this->findAll();
 
-		/** @var $document \TYPO3\Docs\Domain\Model\Document */
+		/** @var $document Document */
 		foreach ($documents as $document) {
 
-			$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
-			$this->documentRepository->update($document);
+			$document->setStatus(Document::STATUS_RENDER);
+			$this->update($document);
 			$message = sprintf('%s: updating new document object %s', ucfirst($document->getRepositoryType()), $document->getUri());
 			$this->systemLogger->log($message, LOG_INFO);
 

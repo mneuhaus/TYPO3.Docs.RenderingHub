@@ -53,7 +53,6 @@ class TerService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 	 * @return \TYPO3\Docs\Domain\Model\Document
 	 */
 	public function create(\TYPO3\Docs\Domain\Model\Package $package) {
-
 		$uri = $this->uriFinder->getUri($package);
 
 		$fileName = $this->fileFinder->getExtensionFileNameAndSubPath($package) . '.t3x';
@@ -86,8 +85,6 @@ class TerService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 	 * @return void
 	 */
 	public function build(\TYPO3\Docs\Domain\Model\Document $document) {
-
-		// Create a job and insert it into the queue
 		$job = $this->buildService->create($document);
 		$this->buildService->queue($job);
 		$this->systemLogger->log('Ter: added new job for document ' . $document->getUri(), LOG_INFO);

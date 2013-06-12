@@ -90,7 +90,7 @@ class Document {
 	protected $locale = '';
 
 	/**
-	 * Product to which the documentation belongs, e.g. "TYPO3", "FLOW3"
+	 * Product to which the documentation belongs, e.g. "TYPO3", "Flow"
 	 *
 	 * @var string
 	 * @Flow\Validate(type="NotEmpty")

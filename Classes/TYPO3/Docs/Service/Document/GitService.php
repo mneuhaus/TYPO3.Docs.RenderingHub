@@ -79,8 +79,6 @@ class GitService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 	 * @return void
 	 */
 	public function build(\TYPO3\Docs\Domain\Model\Document $document) {
-
-		// Create a job and insert it into the queue
 		$job = $this->buildService->create($document);
 		$this->buildService->queue($job);
 		$this->systemLogger->log('Git: added new job for document ' . $document->getUri(), LOG_INFO);

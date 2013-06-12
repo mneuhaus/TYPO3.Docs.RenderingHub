@@ -91,7 +91,7 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 */
 	public function execute(\TYPO3\Jobqueue\Common\Queue\QueueInterface $queue, \TYPO3\Jobqueue\Common\Queue\Message $message) {
 
-		$documents = $this->documentRepository->findDocumentToBeSync($this->packageKey);
+		$documents = $this->documentRepository->findDocumentsWaitingToBeSynced($this->packageKey);
 		if (count($documents) === 0) {
 			$this->systemLogger->log("Sync: nothing to synchronize for package {$this->packageKey}");
 			return TRUE;

@@ -14,7 +14,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class GitPackage implements \TYPO3\Docs\Finder\Uri\FinderInterface {
+class GitPackage implements FinderInterface {
 
 	/**
 	 * Returns an URI according to some rules

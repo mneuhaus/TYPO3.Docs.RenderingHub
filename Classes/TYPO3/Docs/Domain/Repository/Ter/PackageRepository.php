@@ -73,9 +73,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 		$packages = array();
 
 		foreach ($this->findAll() as $package) {
-
 			if ($package->getTitle() === $packageKey) {
-
 				if (empty($version)) {
 					$packages[] = $package;
 				} elseif($package->getVersion() === $version) {
@@ -111,7 +109,6 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 	 * @return void
 	 */
 	public function synchronize() {
-
 		if ($this->dataSource->update()) {
 
 			$this->systemLogger->log('Ter: importing new set of packages, it will take a while...', LOG_INFO);

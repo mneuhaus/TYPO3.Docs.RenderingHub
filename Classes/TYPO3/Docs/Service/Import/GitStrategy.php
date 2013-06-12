@@ -10,7 +10,7 @@ namespace TYPO3\Docs\Service\Import;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * Class dealing with Ter data source
+ * Class dealing with Git data source
  *
  * @Flow\Scope("singleton")
  */
@@ -60,7 +60,6 @@ class GitStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
 	 * @return void
 	 */
 	public function import($packageKey, $version = '') {
-
 		$packages = $this->gitPackageRepository->findByPackageKey($packageKey, $version);
 		foreach ($packages as $package) {
 			$document = $this->documentService->create($package);

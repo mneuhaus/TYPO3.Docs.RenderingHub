@@ -118,6 +118,7 @@ class PackageRepository extends \TYPO3\Docs\Domain\Repository\AbstractRepository
 		$data['repositoryType'] = $repositoryType;
 		$this->connection->delete($this->tableName, (array)$data);
 	}
+
 }
 
 ?>

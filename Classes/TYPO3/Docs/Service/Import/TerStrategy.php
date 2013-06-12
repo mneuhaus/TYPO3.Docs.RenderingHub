@@ -82,7 +82,6 @@ class TerStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
 
 			$uri = $this->uriFinder->getUri($package);
 
-
 			if ($this->documentRepository->notExists($uri)) {
 
 				$document = $this->documentService->create($package);

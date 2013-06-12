@@ -14,7 +14,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class Directory implements \TYPO3\Docs\Finder\Directory\FinderInterface {
+class Directory implements Directory\FinderInterface {
 
 	/**
 	 * @Flow\Inject
@@ -65,7 +65,7 @@ class Directory implements \TYPO3\Docs\Finder\Directory\FinderInterface {
 	 * Returns the proper finder for a document
 	 *
 	 * @param \TYPO3\Docs\Domain\Model\Document $document
-	 * @return \TYPO3\Docs\Finder\Directory\FinderInterface
+	 * @return Directory\FinderInterface
 	 */
 	protected function getFinder($document) {
 		$repositoryType = $document->getRepositoryType();

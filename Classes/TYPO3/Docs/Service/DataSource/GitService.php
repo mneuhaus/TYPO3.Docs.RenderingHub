@@ -148,7 +148,7 @@ class GitService implements \TYPO3\Docs\Service\DataSource\ServiceInterface {
 			elseif (preg_match('/^\/FLOW3\/Packages/is', $packageKey)) {
 
 				$cachePackages[] = array(
-					'product' => 'FLOW3',
+					'product' => 'Flow',
 					'language' => 'us_US',
 					'type' => 'manual',
 					'packageKey' => $packagesParts[2],
