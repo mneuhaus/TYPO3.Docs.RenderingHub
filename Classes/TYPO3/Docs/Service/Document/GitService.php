@@ -47,24 +47,29 @@ class GitService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 	 * @return \TYPO3\Docs\Domain\Model\Document
 	 */
 	public function create(\TYPO3\Docs\Domain\Model\Package $package) {
-		$document = new \TYPO3\Docs\Domain\Model\Document();
-		$document->setTitle($package->getTitle());
-		$document->setAbstract($package->getAbstract());
-		$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
-		$document->setType($package->getType());
-		$document->setGenerationDate(new \DateTime('now'));
-		$document->setVersion($package->getVersion());
-		$document->setLocale($package->getLocale());
-		$document->setProduct($package->getProduct());
-		$document->setRepository($package->getRepository());
-		$document->setRepositoryTag($package->getRepositoryTag());
-		$document->setPackageKey($package->getPackageKey());
-		$document->setUri($package->getUri());
-		$document->setRepositoryType($package->getRepositoryType());
+		if ($this->documentRepository->notExists($package->getUri())) {
+			$document = new \TYPO3\Docs\Domain\Model\Document();
+			$document->setTitle($package->getTitle());
+			$document->setAbstract($package->getAbstract());
+			$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
+			$document->setType($package->getType());
+			$document->setGenerationDate(new \DateTime('now'));
+			$document->setVersion($package->getVersion());
+			$document->setLocale($package->getLocale());
+			$document->setProduct($package->getProduct());
+			$document->setRepository($package->getRepository());
+			$document->setRepositoryTag($package->getRepositoryTag());
+			$document->setPackageKey($package->getPackageKey());
+			$document->setUri($package->getUri());
+			$document->setRepositoryType($package->getRepositoryType());
 
-			// Insert the document in the database
-		$this->documentRepository->add($document);
-		$this->systemLogger->log('Git: added new document object for ' . $package->getUri(), LOG_INFO);
+			$this->documentRepository->add($document);
+			$this->systemLogger->log('Git: added new document object for ' . $package->getUri(), LOG_INFO);
+		} else {
+			$document = $this->documentRepository->findOneByUri($package->getUri());
+			$this->documentRepository->update($document);
+			$this->systemLogger->log('Git: updated document object ' . $package->getUri(), LOG_INFO);
+		}
 
 		return $document;
 	}

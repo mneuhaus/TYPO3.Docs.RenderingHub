@@ -3,16 +3,14 @@
 #
 
 -
-  name: 'Docs with action'
+  name: 'API Hooks'
+  uriPattern: 'api/hooks(/{type})'
+  defaults:
+    '@package':    'TYPO3.Docs'
+    '@controller': 'Hooks'
+
+-
+  name: 'Docs fallback'
   uriPattern: ''
   defaults:
     '@package':    'TYPO3.Docs'
-    '@controller': 'Standard'
-
--
-  name: 'Docs admin with action'
-  uriPattern: 'admin(/)'
-  defaults:
-    '@package':    'TYPO3.Docs'
-    '@controller': 'Admin'
-    '@action':     'index'

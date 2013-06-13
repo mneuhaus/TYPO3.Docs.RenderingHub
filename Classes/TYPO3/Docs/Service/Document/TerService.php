@@ -55,25 +55,29 @@ class TerService implements \TYPO3\Docs\Service\Document\ServiceInterface {
 	public function create(\TYPO3\Docs\Domain\Model\Package $package) {
 		$uri = $this->uriFinder->getUri($package);
 
-		$fileName = $this->fileFinder->getExtensionFileNameAndSubPath($package) . '.t3x';
+		if ($this->documentRepository->notExists($uri)) {
+			$document = new \TYPO3\Docs\Domain\Model\Document();
+			$document->setTitle($package->getTitle());
+			$document->setAbstract($package->getAbstract());
+			$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
+			$document->setType($package->getType());
+			$document->setGenerationDate(new \DateTime('now'));
+			$document->setVersion($package->getVersion());
+			$document->setLocale($package->getLocale());
+			$document->setProduct($package->getProduct());
+			$document->setPackageFile($this->fileFinder->getExtensionFileNameAndSubPath($package) . '.t3x');
+			$document->setPackageKey($package->getPackageKey());
+			$document->setUri($uri);
+			$document->setRepositoryType($package->getRepositoryType());
 
-		$document = new \TYPO3\Docs\Domain\Model\Document();
-		$document->setTitle($package->getTitle());
-		$document->setAbstract($package->getAbstract());
-		$document->setStatus(\TYPO3\Docs\Domain\Model\Document::STATUS_RENDER);
-		$document->setType($package->getType());
-		$document->setGenerationDate(new \DateTime('now'));
-		$document->setVersion($package->getVersion());
-		$document->setLocale($package->getLocale());
-		$document->setProduct($package->getProduct());
-		$document->setPackageFile($fileName);
-		$document->setPackageKey($package->getPackageKey());
-		$document->setUri($uri);
-		$document->setRepositoryType($package->getRepositoryType());
-
-		// Insert the document in the database
-		$this->documentRepository->add($document);
-		$this->systemLogger->log('Ter: added new document object ' . $uri, LOG_INFO);
+			// Insert the document in the database
+			$this->documentRepository->add($document);
+			$this->systemLogger->log('Ter: added new document object ' . $uri, LOG_INFO);
+		} else {
+			$document = $this->documentRepository->findOneByUri($uri);
+			$this->documentRepository->update($document);
+			$this->systemLogger->log('Ter: updated document object ' . $uri, LOG_INFO);
+		}
 
 		return $document;
 	}

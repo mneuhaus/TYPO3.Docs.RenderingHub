@@ -102,6 +102,46 @@ class PackageRepository {
 	}
 
 	/**
+	 * Find TER packages by package (extension) key and version
+	 *
+	 * @param string $packageKey
+	 * @param string $version (optional)
+	 * @return \TYPO3\Docs\Domain\Model\Package[]
+	 */
+	public function findTerPackagesByPackageKey($packageKey, $version = NULL) {
+		$packages = array();
+		if (empty($version)) {
+			$result = $this->connection->fetchAll("SELECT * FROM {$this->tableName} WHERE repositoryType = ? AND packageKey = ?", array('ter', $packageKey));
+		} else {
+			$result = $this->connection->fetchAll("SELECT * FROM {$this->tableName} WHERE repositoryType = ? AND packageKey = ? AND version = ?", array('ter', $packageKey, $version));
+		}
+		foreach ($result as $row) {
+			$packages[] = new \TYPO3\Docs\Domain\Model\Package($row);
+		}
+		return $packages;
+	}
+
+	/**
+	 * Find git packages by package (extension) key and version
+	 *
+	 * @param string $packageKey
+	 * @param string $version (optional)
+	 * @return \TYPO3\Docs\Domain\Model\Package[]
+	 */
+	public function findGitPackagesByPackageKey($packageKey, $version = NULL) {
+		$packages = array();
+		if (empty($version)) {
+			$result = $this->connection->fetchAll("SELECT * FROM {$this->tableName} WHERE repositoryType = ? AND packageKey = ?", array('git', $packageKey));
+		} else {
+			$result = $this->connection->fetchAll("SELECT * FROM {$this->tableName} WHERE repositoryType = ? AND packageKey = ? AND version = ?", array('git', $packageKey, $version));
+		}
+		foreach ($result as $row) {
+			$packages[] = new \TYPO3\Docs\Domain\Model\Package($row);
+		}
+		return $packages;
+	}
+
+	/**
 	 * Add a new package
 	 *
 	 * @param array $data
