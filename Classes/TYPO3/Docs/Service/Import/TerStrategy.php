@@ -14,31 +14,13 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class TerStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
+class TerStrategy extends AbstractStrategy {
 
 	/**
 	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\Ter\PackageRepository
 	 */
-	protected $terPackageRepository;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
-	 */
-	protected $documentRepository;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Finder\Uri
-	 */
-	protected $uriFinder;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Log\SystemLogger
-	 */
-	protected $systemLogger;
+	protected $packageRepository;
 
 	/**
 	 * @Flow\Inject
@@ -48,52 +30,10 @@ class TerStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Utility\RunTimeSettings
+	 * @var \TYPO3\Docs\Finder\Uri
 	 */
-	protected $runTimeSettings;
+	protected $uriFinder;
 
-	/**
-	 * Retrieve a TYPO3 package given a package name and its possible versions and then render them.
-	 *
-	 * @param string $packageKey the package name
-	 * @param string $version the package name
-	 * @return void
-	 */
-	public function import($packageKey, $version = '') {
-
-		$packages = $this->terPackageRepository->findByPackageKey($packageKey, $version);
-		foreach ($packages as $package) {
-			$document = $this->documentService->create($package);
-			$this->documentService->build($document);
-		}
-	}
-
-	/**
-	 * Retrieve all TYPO3 packages from a repository and render them.
-	 *
-	 * @return void
-	 */
-	public function importAll() {
-
-		$packages = $this->terPackageRepository->findAll();
-		$counter = 0;
-
-		foreach ($packages as $package) {
-
-			$uri = $this->uriFinder->getUri($package);
-
-			if ($this->documentRepository->notExists($uri)) {
-
-				$document = $this->documentService->create($package);
-				$this->documentService->build($document);
-
-				// prevent the script to loop too many times to keep the resources safe
-				$counter++;
-				if ($counter >= $this->runTimeSettings->getLimit()) {
-					break;
-				}
-			}
-		}
-	}}
+}
 
 ?>

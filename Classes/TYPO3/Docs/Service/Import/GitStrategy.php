@@ -14,25 +14,13 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class GitStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
+class GitStrategy extends AbstractStrategy {
 
 	/**
 	 * @Flow\Inject
 	 * @var \TYPO3\Docs\Domain\Repository\Git\PackageRepository
 	 */
-	protected $gitPackageRepository;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Domain\Repository\DocumentRepository
-	 */
-	protected $documentRepository;
-
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Log\SystemLogger
-	 */
-	protected $systemLogger;
+	protected $packageRepository;
 
 	/**
 	 * @Flow\Inject
@@ -40,47 +28,6 @@ class GitStrategy implements \TYPO3\Docs\Service\Import\StrategyInterface {
 	 */
 	protected $documentService;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\Utility\RunTimeSettings
-	 */
-	protected $runTimeSettings;
-
-	/**
-	 * Retrieve a TYPO3 package given a package name and its possible versions and then render them.
-	 *
-	 * @param string $packageKey the package name
-	 * @param string $version the package name
-	 * @return void
-	 */
-	public function import($packageKey, $version = '') {
-		$packages = $this->gitPackageRepository->findByPackageKey($packageKey, $version);
-		foreach ($packages as $package) {
-			$document = $this->documentService->create($package);
-			$this->documentService->build($document);
-		}
-	}
-
-	/**
-	 * Retrieve all TYPO3 packages from a repository and render them.
-	 *
-	 * @return void
-	 */
-	public function importAll() {
-		$packages = $this->gitPackageRepository->findAll();
-		$counter = 0;
-
-		foreach ($packages as $package) {
-			if ($this->documentRepository->notExists($package->getUri())) {
-				$document = $this->documentService->create($package);
-				$this->documentService->build($document);
-
-				if ($counter++ >= $this->runTimeSettings->getLimit()) {
-					break;
-				}
-			}
-		}
-	}
 }
 
 ?>
