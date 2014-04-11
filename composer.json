@@ -5,6 +5,7 @@
     "license": "GPL-3.0+",
     "require": {
         "typo3/flow": "*",
+        "typo3/twitter-bootstrap": "*",
         "typo3/resttools": "*",
         "typo3/swiftmailer": "*",
         "typo3/jobqueue-beanstalkd": "*"
