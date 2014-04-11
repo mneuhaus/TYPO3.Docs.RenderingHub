@@ -23,6 +23,7 @@ class QueueCommandController extends \TYPO3\Flow\Cli\CommandController {
 	 */
 	protected $queues = array(
 		'git',
+		'ter',
 //		'sync',
 	);
 
