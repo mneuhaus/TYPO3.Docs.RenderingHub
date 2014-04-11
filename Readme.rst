@@ -1,5 +1,5 @@
 TYPO3.Docs
-============
+==========
 
 The Documentation is available on the Forge Wiki
 

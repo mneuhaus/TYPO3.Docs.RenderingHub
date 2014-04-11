@@ -1,7 +1,8 @@
 {
-    "name": "typo3/docs",
+    "name": "typo3/docs-renderinghub",
     "type": "typo3-flow-package",
     "description": "The orchestration package for the TYPO3 documentation rendering system",
+    "license": "GPL-3.0+",
     "require": {
         "typo3/flow": "*",
         "typo3/resttools": "*",
@@ -10,7 +11,7 @@
     },
     "autoload": {
         "psr-0": {
-            "TYPO3\\Docs": "Classes"
+            "TYPO3\\Docs\\RenderingHub": "Classes"
         }
     }
 }
