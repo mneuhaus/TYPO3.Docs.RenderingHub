@@ -97,7 +97,7 @@ class Queue  {
 	 * @return boolean
 	 */
 	public function isOpenOfficeProcess() {
-		$command = "ps -C soffice -o pid=,args=";
+		$command = "ps -C soffice.bin -o pid=,args=";
 		exec($command, $processIds);
 		return ! empty($processIds);
 	}
