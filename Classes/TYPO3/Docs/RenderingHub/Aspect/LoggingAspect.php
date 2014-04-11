@@ -10,7 +10,7 @@ namespace TYPO3\Docs\RenderingHub\Aspect;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * TODO this should be replaced by configuring the LogginTransport for Development context
+ * TODO this should be replaced by configuring the LoggingTransport for Development context
  *
  * @Flow\Aspect
  */

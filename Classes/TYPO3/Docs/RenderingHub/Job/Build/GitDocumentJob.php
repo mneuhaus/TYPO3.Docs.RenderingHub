@@ -300,7 +300,7 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 */
 	protected function writeMakeFile() {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
-		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/Makefile.fluid');
+		$view->setTemplatePathAndFilename('resource://TYPO3.Docs.RenderingHub/Private/Templates/Build/Makefile.fluid');
 		$view->assign('inputDirectory', $this->inputDirectory . '/Documentation');
 		$view->assign('outputDirectory', $this->outputDirectory);
 		file_put_contents($this->temporaryDirectory . '/Makefile', $view->render());
@@ -313,7 +313,7 @@ class GitDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 */
 	protected function writeConfFile() {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
-		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/conf.py.fluid');
+		$view->setTemplatePathAndFilename('resource://TYPO3.Docs.RenderingHub/Private/Templates/Build/conf.py.fluid');
 		$view->assign('inputDirectory', $this->inputDirectory);
 		$view->assign('outputDirectory', $this->outputDirectory);
 		file_put_contents($this->temporaryDirectory . '/conf.py', $view->render());

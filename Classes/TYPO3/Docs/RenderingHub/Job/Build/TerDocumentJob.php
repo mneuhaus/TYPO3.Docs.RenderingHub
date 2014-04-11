@@ -248,7 +248,7 @@ class TerDocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 */
 	protected function overwriteMake() {
 		$view = new \TYPO3\Fluid\View\StandaloneView();
-		$view->setTemplatePathAndFilename('resource://TYPO3.Docs/Private/Templates/Build/Makefile.legacy.fluid');
+		$view->setTemplatePathAndFilename('resource://TYPO3.Docs.RenderingHub/Private/Templates/Build/Makefile.legacy.fluid');
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($this->makeDirectory);
 
 		$makeFilePathAndFilename = $this->makeDirectory . '/Makefile';
