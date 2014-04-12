@@ -94,6 +94,7 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 		$documents = $this->documentRepository->findDocumentsWaitingToBeSynced($this->packageKey);
 		if (count($documents) === 0) {
 			$this->systemLogger->log("Sync: nothing to synchronize for package {$this->packageKey}");
+
 			return TRUE;
 		}
 
@@ -123,10 +124,10 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 			} else {
 				$this->systemLogger->log("Sync: path not found $buildPath. Are you in dry-run mode?");
 			}
-
 		}
 
 		$this->systemLogger->log("-----------------------------------------------");
+
 		return TRUE;
 	}
 
@@ -138,10 +139,9 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @return void
 	 */
 	protected function rsync($buildPath, $publicPath) {
-
 		$publicPath = $this->getPublicPath($publicPath);
 
-		$command = $this->getAliasSyncCommand($buildPath, $publicPath);
+		$command = $this->getSyncCommand($buildPath, $publicPath);
 		$this->systemLogger->log('     -> build path ' . $buildPath);
 		$this->systemLogger->log('     -> public path ' . $publicPath);
 		\TYPO3\Docs\RenderingHub\Utility\Console::run($command);
@@ -153,34 +153,8 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 	 * @param string $buildPath
 	 * @param string $publicPath
 	 * @return string
-	 *
-	 * @deprecated will be removed in 1.2
 	 */
 	protected function getSyncCommand($buildPath, $publicPath) {
-
-		$parts = explode('/', $publicPath);
-		array_pop($parts);
-		$publicPath = implode('/', $parts);
-
-		$command = sprintf('rsync -aE --delete %s %s',
-			$buildPath,
-			$publicPath
-		);
-
-		return $command;
-	}
-
-	/**
-	 * Generate the sync command for a document
-	 *
-	 * @param string $buildPath
-	 * @param string $publicPath
-	 * @return string
-	 */
-	protected function getAliasSyncCommand($buildPath, $publicPath) {
-
-		// rsync behaves strangely when target directory is not the same as the source
-		// TODO what does srtangely mean?
 		// Thus remove the alias uri path first which will be re-created by rsync
 		\TYPO3\Flow\Utility\Files::removeDirectoryRecursively($publicPath);
 
@@ -223,6 +197,7 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 		if ($createDirectory) {
 			\TYPO3\Flow\Utility\Files::createDirectoryRecursively($publicPath);
 		}
+
 		return $publicPath;
 	}
 
@@ -251,4 +226,3 @@ class DocumentJob implements \TYPO3\Jobqueue\Common\Job\JobInterface {
 		$this->dryRun = $dryRun;
 	}
 }
-?>
