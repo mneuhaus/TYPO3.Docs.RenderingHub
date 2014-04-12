@@ -6,11 +6,11 @@
   name: 'API Hooks'
   uriPattern: 'api/hooks(/{type})'
   defaults:
-    '@package':    'TYPO3.Docs'
+    '@package':    'TYPO3.Docs.RenderingHub'
     '@controller': 'Hooks'
 
 -
   name: 'Docs fallback'
   uriPattern: ''
   defaults:
-    '@package':    'TYPO3.Docs'
+    '@package':    'TYPO3.Docs.RenderingHub'
