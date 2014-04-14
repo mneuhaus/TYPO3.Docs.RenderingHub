@@ -189,55 +189,7 @@ class PackageRepository {
 	 * @return boolean if anything has been extracted, negative int value if an error occurs
 	 */
 	public function extract($packageLocalFile, $targetDirectory) {
-
-		// computes the t3x file
-		if (!is_file($packageLocalFile)) {
-			throw new \TYPO3\Docs\RenderingHub\Exception\MissingFileException('Exception thrown #1300111630: file does not exist "' . $packageLocalFile . '"', 1300111630);
-		}
-
-		$t3xFileRaw = file_get_contents($packageLocalFile);
-		if ($t3xFileRaw === FALSE) {
-			$this->systemLogger->log('Ter: error while reading t3x file "' . $packageLocalFile . '"', LOG_WARNING);
-			return self::ERRORCODE_ERRORWHILEREADINGT3XFILE;
-		}
-
-		list ($md5Hash, $compressionFlag, $dataRaw) = preg_split('/:/is', $t3xFileRaw, 3);
-		unset($t3xFileRaw);
-
-		$dataUncompressed = gzuncompress($dataRaw);
-
-		if ($md5Hash !== md5($dataUncompressed)) {
-			$this->systemLogger->log('Ter: T3X archive is corrupted, MD5 hash didn\'t match for file "' . $packageLocalFile . '"', LOG_WARNING);
-			return self::ERRORCODE_T3XARCHIVECORRUPTED;
-		}
-		unset($dataRaw);
-
-		$t3xArr = unserialize($dataUncompressed);
-		if (!is_array($t3xArr)) {
-			$this->systemLogger->log('Ter: ERROR while uncompressing t3x file "' . $packageLocalFile . '"', LOG_WARNING);
-			return self::ERRORCODE_ERRORWHILEUNCOMPRESSINGT3XFILE;
-		}
-		if (!is_array($t3xArr['FILES'])) {
-			$this->systemLogger->log('Ter: ERROR: Corrupted t3x structure - no files found "' . $packageLocalFile . '"', LOG_WARNING);
-			return self::ERRORCODE_CORRUPTEDT3XSTRUCTURENOFILESFOUND;
-		}
-
-		// Extract content related to the documentation:
-		// * doc/manual.sxw
-		// * Documentation/*
-		if (! empty($t3xArr['FILES'])) {
-			foreach ($t3xArr['FILES'] as $file) {
-
-				if (preg_match('/^Documentation\/|^doc\/manual.sxw/is', $file['name'])) {
-					$directory = $targetDirectory . '/' . dirname($file['name']);
-					\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directory);
-
-					$fileFullPath = $targetDirectory . '/' . $file['name'];
-					\TYPO3\Docs\RenderingHub\Utility\Files::write($fileFullPath, $file['content']);
-				}
-			}
-		}
-
+		exec('t3xutils.phar extract ' . escapeshellarg($packageLocalFile) . ' ' . escapeshellarg($targetDirectory));
 		return TRUE;
 	}
 }
