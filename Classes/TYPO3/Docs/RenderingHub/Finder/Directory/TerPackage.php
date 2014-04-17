@@ -43,7 +43,7 @@ class TerPackage implements \TYPO3\Docs\RenderingHub\Finder\Directory\FinderInte
 		$secondLetter = strtolower(substr($document->getPackageKey(), 1, 1));
 
 		list ($majorVersion, $minorVersion, $devVersion) = \TYPO3\Flow\Utility\Arrays::integerExplode('.', $document->getVersion());
-		$directory = $this->settings['terSourceDir'] . '/' . $firstLetter . '/' . $secondLetter . '/' . strtolower($document->getPackageKey()) . '-' . $majorVersion . '.' . $minorVersion . '.' . $devVersion;
+		$directory = $this->settings['terSourceDir'] . '/' . $firstLetter . '/' . $secondLetter . '/' . strtolower($document->getPackageKey()) . '/' . $majorVersion . '.' . $minorVersion . '.' . $devVersion . '/';
 
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directory);
 
@@ -59,7 +59,7 @@ class TerPackage implements \TYPO3\Docs\RenderingHub\Finder\Directory\FinderInte
 	 */
 	public function getBuild(\TYPO3\Docs\RenderingHub\Domain\Model\Document $document) {
 		$segments = array($this->settings['terBuildDir'], $document->getPackageKey(), $document->getVersion());
-		$directory = implode('/', $segments);
+		$directory = implode('/', $segments) . '/';
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directory);
 		return $directory;
 	}
@@ -72,7 +72,10 @@ class TerPackage implements \TYPO3\Docs\RenderingHub\Finder\Directory\FinderInte
 	 * @return string Full path to the document directory for the specified extension version
 	 */
 	public function getTemporary(\TYPO3\Docs\RenderingHub\Domain\Model\Document $document) {
-		// TODO: Implement getTemporary() method.
-	}}
+		$directoryPath = sprintf('%s/%s-%s/', $this->settings['temporaryDir'], $document->getPackageKey(), $document->getVersion());
+		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directoryPath);
+		return $directoryPath;
+	}
+}
 
 ?>

@@ -42,7 +42,7 @@ class GitPackage implements \TYPO3\Docs\RenderingHub\Finder\Directory\FinderInte
 		$uriParts = \TYPO3\Flow\Utility\Arrays::trimExplode('/', $document->getUri());
 		array_pop($uriParts);
 
-		$repositoryPath = $this->settings['gitSourceDir'] . '/' . implode('/', $uriParts);
+		$repositoryPath = $this->settings['gitSourceDir'] . '/' . implode('/', $uriParts) . '/';
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($repositoryPath);
 		return $repositoryPath;
 	}
@@ -55,7 +55,7 @@ class GitPackage implements \TYPO3\Docs\RenderingHub\Finder\Directory\FinderInte
 	 * @return string Full path to the document directory for the specified extension version
 	 */
 	public function getBuild(\TYPO3\Docs\RenderingHub\Domain\Model\Document $document) {
-		$directoryPath = sprintf('%s%s', $this->settings['buildDir'], $document->getUri());
+		$directoryPath = sprintf('%s%s/', $this->settings['buildDir'], $document->getUri());
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directoryPath);
 		return $directoryPath;
 	}
@@ -68,7 +68,7 @@ class GitPackage implements \TYPO3\Docs\RenderingHub\Finder\Directory\FinderInte
 	 * @return string Full path to the document directory for the specified extension version
 	 */
 	public function getTemporary(\TYPO3\Docs\RenderingHub\Domain\Model\Document $document) {
-		$directoryPath = sprintf('%s/%s-%s', $this->settings['temporaryDir'], $document->getPackageKey(), $document->getVersion());
+		$directoryPath = sprintf('%s/%s-%s/', $this->settings['temporaryDir'], $document->getPackageKey(), $document->getVersion());
 		\TYPO3\Flow\Utility\Files::createDirectoryRecursively($directoryPath);
 		return $directoryPath;
 	}
