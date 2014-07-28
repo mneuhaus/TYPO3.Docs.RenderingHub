@@ -3,19 +3,70 @@
 	xmlns:bootstrap="http://typo3.org/ns/TYPO3/Twitter/Bootstrap/ViewHelpers">
 
 	<head>
+		{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
 		<meta charset="utf-8">
 		<title><f:render section="Title" /></title>
 		<f:base />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<bootstrap:include version="3" />
+		<link href="{f:uri.resource(path: 'Styles/Main.css')}" rel="stylesheet" />
 
 	</head>
-	<body>
-		<f:flashMessages class="flashmessages" />
+	<body class="layout-default">
+		<d:user>
+			<f:if condition="{currentUser}">
+				<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+				  	<div class="container">
+						<div class="navbar-header">
+					  		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+					  		</button>
+					  		<a class="navbar-brand" href="#">TYPO3 Docs RenderingHub</a>
+						</div>
+						<div class="collapse navbar-collapse">
+					  		<ul class="nav navbar-nav">
+								<li>
+									<f:link.action action="index" controller="Standard">Dashboard</f:link.action>
+								</li>
+								<f:security.ifHasRole role="TYPO3.Docs.RenderingHub:Administrator">
+									<li><f:link.action action="index" controller="User">Users</f:link.action></li>
+								</f:security.ifHasRole>
+					  		</ul>
+
+							<ul class="nav navbar-nav navbar-right">
+								<li class="dropdown">
+									<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+										<span class="glyphicon glyphicon-user"></span> &nbsp;
+										{currentUser} <b class="caret"></b>
+									</a>
+									<ul class="dropdown-menu">
+										<li>
+											<f:link.action action="editProfile" controller="user" arguments="{user: currentUser}">
+												My Profile
+											</f:link.action>
+										</li>
+    									<li role="presentation" class="divider"></li>
+										<li>
+											<f:link.action action="logout" controller="authentication">
+												Logout &nbsp; <span class="glyphicon glyphicon-log-out"></span>
+											</f:link.action>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+				  	</div>
+				</div>
+			</f:if>
+		</d:user>
 
 		<div class="container">
 			<h1><f:render section="Title" /></h1>
-
+			<d:flashMessages/>
 			<f:render section="Content" />
 		</div>
 

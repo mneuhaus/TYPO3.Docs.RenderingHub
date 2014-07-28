@@ -1,0 +1,20 @@
+{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
+<d:field label="Firstname" property="name.firstName">
+	<f:form.textfield property="name.firstName" class="form-control" />
+</d:field>
+
+<d:field label="Lastname" property="name.lastName">
+	<f:form.textfield property="name.lastName" class="form-control" />
+</d:field>
+
+<d:field label="Username" property="accounts.0.accountIdentifier">
+	<f:form.textfield property="accounts.0.accountIdentifier" class="form-control" />
+</d:field>
+
+<d:field label="Password" property="password">
+	<f:form.password name="password" class="form-control" />
+</d:field>
+
+<d:field label="Confirmation" property="confirmation">
+	<f:form.password name="confirmation" class="form-control" />
+</d:field>

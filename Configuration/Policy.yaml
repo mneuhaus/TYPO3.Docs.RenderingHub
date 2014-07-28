@@ -1,0 +1,25 @@
+#                                                                        #
+# Security policy for the TYPO3 Flow Framework                           #
+#                                                                        #
+# This file contains the default security policy configuration for the   #
+# TYPO3 Flow Framework. Don't modify this file but add configuration     #
+# options to the Policy.yaml file in the in global Configuration/        #
+# directory instead.                                                     #
+
+resources:
+  methods:
+    TYPO3_Docs_RenderingHub_Standard: 'method(TYPO3\Docs\RenderingHub\Controller\StandardController->.*())'
+    TYPO3_Docs_RenderingHub_User: 'method(TYPO3\Docs\RenderingHub\Controller\UserController->.*())'
+
+roles:
+  Administrator: []
+
+acls:
+  Everyone:
+    methods:
+      TYPO3_Docs_RenderingHub_Standard: DENY
+      TYPO3_Docs_RenderingHub_User: DENY
+  Administrator:
+    methods:
+      TYPO3_Docs_RenderingHub_Standard: GRANT
+      TYPO3_Docs_RenderingHub_User: GRANT

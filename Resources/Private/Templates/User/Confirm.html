@@ -1,0 +1,25 @@
+<html xmlns:f="http://typo3.org/ns/typo3/fluid/viewhelpers">
+<f:layout name="Default"/>
+{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
+
+<f:section name="Title">Are you sure that you want to delete:</f:section>
+
+<f:section name="Content">
+	<f:form action="delete" object="{user}" objectName="user">
+		<div class="well clearfix">
+
+			<div class="media">
+				<div class="media-body">
+					<h4 class="media-heading">{user.name}</h4>
+					{user.mainAccount.accountIdentifier}
+				</div>
+			</div>
+
+			<f:link.action action="index" class="btn btn-default pull-left">No</f:link.action>
+
+			<f:form.submit value="Yes, delete!" class="btn btn-danger pull-right" />
+		</div>
+	</f:form>
+
+</f:section>
+</html>

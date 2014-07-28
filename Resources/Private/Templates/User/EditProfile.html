@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/typo3/fluid/viewhelpers">
+<f:layout name="Default"/>
+{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
+
+<f:section name="Title">My Profile</f:section>
+
+<f:section name="Content">
+	<f:form action="updateProfile" object="{user}" objectName="user" class="form-horizontal">
+
+		<f:render partial="User/Fields.html" arguments="{user: user}" />
+
+		<f:form.submit value="Save" class="btn btn-default pull-right" />
+	</f:form>
+
+</f:section>
+</html>

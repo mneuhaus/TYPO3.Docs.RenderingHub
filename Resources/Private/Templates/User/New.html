@@ -1,0 +1,34 @@
+<html xmlns:f="http://typo3.org/ns/typo3/fluid/viewhelpers">
+<f:layout name="Default"/>
+{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
+
+<f:section name="Title">Create a new User</f:section>
+
+<f:section name="Content">
+	<f:form action="create" object="{user}" objectName="user" class="form-horizontal">
+
+		<d:field label="Firstname" property="name.firstName">
+			<f:form.textfield property="name.firstName" class="form-control" />
+		</d:field>
+
+		<d:field label="Lastname" property="name.lastName">
+			<f:form.textfield property="name.lastName" class="form-control" />
+		</d:field>
+
+		<d:field label="Username" property="username">
+			<f:form.textfield name="username" class="form-control" />
+		</d:field>
+
+		<d:field label="Password" property="password">
+			<f:form.password name="password" class="form-control" />
+		</d:field>
+
+		<d:field label="Confirmation" property="confirmation">
+			<f:form.password name="confirmation" class="form-control" />
+		</d:field>
+
+		<f:form.submit value="Create" class="btn btn-default pull-right" />
+	</f:form>
+
+</f:section>
+</html>

@@ -3,6 +3,17 @@
 #                                                                        #
 
 TYPO3:
+  Flow:
+    security:
+      enable: true
+      authentication:
+        providers:
+          DocsRenderingHubProvider:
+            provider: PersistedUsernamePasswordProvider
+            entryPoint: WebRedirect
+            entryPointOptions:
+              uri: login
+
   Docs:
     RenderingHub:
       # Email notification

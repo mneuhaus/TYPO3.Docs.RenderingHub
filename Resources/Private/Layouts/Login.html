@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:f="http://typo3.org/ns/typo3/fluid/viewhelpers"
+	xmlns:bootstrap="http://typo3.org/ns/TYPO3/Twitter/Bootstrap/ViewHelpers">
+
+	<head>
+		{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
+		<meta charset="utf-8">
+		<title><f:render section="Title" /></title>
+		<f:base />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+		<bootstrap:include version="3" />
+		<link href="{f:uri.resource(path: 'Styles/Main.css')}" rel="stylesheet" />
+
+	</head>
+	<body class="layout-login">
+		<div class="container">
+			<f:render section="Content" />
+		</div>
+	</body>
+</html>

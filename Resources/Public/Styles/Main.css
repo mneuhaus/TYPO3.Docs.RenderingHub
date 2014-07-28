@@ -1,0 +1,19 @@
+body.layout-default {
+  padding-top: 80px;
+}
+
+body.layout-login {
+  background: #3b3e40;
+}
+
+.login {
+  width: 330px;
+  margin: 100px auto 0;
+  background: #f4f6f9;
+  padding: 15px;
+  box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.3);
+}
+
+.login h4 {
+	margin-top: 0;
+}

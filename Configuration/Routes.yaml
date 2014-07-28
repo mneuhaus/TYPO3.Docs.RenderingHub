@@ -10,6 +10,22 @@
     '@controller': 'Hooks'
 
 -
+  name: 'Login'
+  uriPattern: 'login'
+  defaults:
+    '@action': 'index'
+    '@controller': 'Authentication'
+    '@package':    'TYPO3.Docs.RenderingHub'
+
+-
+  name: 'Logout'
+  uriPattern: 'logout'
+  defaults:
+    '@action': 'logout'
+    '@controller': 'Authentication'
+    '@package':    'TYPO3.Docs.RenderingHub'
+
+-
   name: 'Docs fallback'
   uriPattern: ''
   defaults:
