@@ -10,6 +10,14 @@
     '@controller': 'Hooks'
 
 -
+  name: 'API Hooks'
+  uriPattern: 'api/hooks/document/queue'
+  defaults:
+    '@package':    'TYPO3.Docs.RenderingHub'
+    '@action': 'queue'
+    '@controller': 'Hooks'
+
+-
   name: 'Login'
   uriPattern: 'login'
   defaults:

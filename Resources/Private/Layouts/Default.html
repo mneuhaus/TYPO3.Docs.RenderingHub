@@ -5,12 +5,13 @@
 	<head>
 		{namespace d=TYPO3\Docs\RenderingHub\ViewHelpers}
 		<meta charset="utf-8">
-		<title><f:render section="Title" /></title>
+		<title><f:render section="Title" optional="1"/></title>
 		<f:base />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 		<bootstrap:include version="3" />
 		<link href="{f:uri.resource(path: 'Styles/Main.css')}" rel="stylesheet" />
+		<link href="{f:uri.resource(path: 'Styles/Base.css', package: 'Flowpack.Expose')}" rel="stylesheet" />
 
 	</head>
 	<body class="layout-default">
@@ -32,6 +33,8 @@
 								<li>
 									<f:link.action action="index" controller="Standard">Dashboard</f:link.action>
 								</li>
+								<li><f:link.action action="index" controller="Package">Packages</f:link.action></li>
+								<li><f:link.action action="index" controller="Document">Documents</f:link.action></li>
 								<f:security.ifHasRole role="TYPO3.Docs.RenderingHub:Administrator">
 									<li><f:link.action action="index" controller="User">Users</f:link.action></li>
 								</f:security.ifHasRole>

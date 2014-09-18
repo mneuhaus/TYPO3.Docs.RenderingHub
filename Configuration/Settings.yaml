@@ -14,6 +14,18 @@ TYPO3:
             entryPointOptions:
               uri: login
 
+    object:
+      excludeClasses:
+       'gedmo.doctrineextensions': ['.*']
+       'videlalvaro.phpamqplib': ['.*']
+
+    persistence:
+      doctrine:
+        eventListeners:
+          -
+            events: ['prePersist', 'onFlush', 'loadClassMetadata']
+            listener: 'Gedmo\Timestampable\TimestampableListener'
+
   Docs:
     RenderingHub:
       # Email notification
@@ -28,14 +40,15 @@ TYPO3:
       temporaryDir: '%FLOW_PATH_DATA%Temporary/Documentation'
       lockFile: '%FLOW_PATH_DATA%Documentation/lock'
 
-      # Ter
-      terUrl: 'http://typo3.org/fileadmin/ter/'
-      terBuildDir: '%FLOW_PATH_DATA%Documentation/Build/typo3cms/Extensions'
-      terSourceDir: '%FLOW_PATH_DATA%Documentation/Source/Ter'
-      terDatasource: '%FLOW_PATH_DATA%Documentation/Source/Ter/extensions.xml.gz'
-      terDatasourceRemote: 'http://typo3.org/fileadmin/ter/extensions.xml.gz'
-      sxw2htmlPath: 'T3PythonDocBuilderPackage/src/T3PythonDocBuilder'
-      sxw2html: 't3pdb_sxw2html.py'
+      importStrategies:
+        ter:
+          url: 'http://typo3.org/fileadmin/ter/'
+          buildDir: '%FLOW_PATH_DATA%Documentation/Build/typo3cms/Extensions'
+          sourceDir: '%FLOW_PATH_DATA%Documentation/Source/Ter'
+          datasource: '%FLOW_PATH_DATA%Documentation/Source/Ter/extensions.xml.gz'
+          datasourceRemote: 'http://typo3.org/fileadmin/ter/extensions.xml.gz'
+          sxw2htmlPath: 'T3PythonDocBuilderPackage/src/T3PythonDocBuilder'
+          sxw2html: 't3pdb_sxw2html.py'
 
       # Git
       gitSourceDir: '%FLOW_PATH_DATA%Documentation/Source/Git'
@@ -49,9 +62,12 @@ TYPO3:
   Jobqueue:
     Common:
       queues:
-        git:
-          className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
-        ter:
-          className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
-        sync:
-          className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
+        org.typo3.docs.build:
+          className: 'TYPO3\Jobqueue\Doctrine\Queue\DoctrineQueue'
+
+        # git:
+        #   className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
+        # ter:
+        #   className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'
+        # sync:
+        #   className: 'TYPO3\Jobqueue\Beanstalkd\Queue\BeanstalkdQueue'

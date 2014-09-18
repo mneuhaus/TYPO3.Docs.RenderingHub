@@ -1,0 +1,18 @@
+<f:layout name="Default" />
+{namespace e=Flowpack\Expose\ViewHelpers}
+
+<f:section name="Title">
+</f:section>
+
+<f:section name="Content">
+	<f:form action="update" object="{entity}" objectName="entity" class="form-horizontal">
+		<e:form.field property="title" id="title"/>
+		<e:form.field property="identifier" id="identifier"/>
+
+		<div class="form-group">
+			<div class="col-sm-offset-3 col-sm-9">
+				<f:form.submit value="Create" class="btn btn-default" />
+			</div>
+		</div>
+	</f:form>
+</f:section>

@@ -1,0 +1,5 @@
+'TYPO3\Docs\RenderingHub\Domain\Model\Document':
+  listFields: title, type, source
+  searchFields: title
+  defaultSortBy: title
+  defaultOrder: ASC

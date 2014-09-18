@@ -1,0 +1,14 @@
+<f:layout name="Default" />
+{namespace e=Flowpack\Expose\ViewHelpers}
+
+<f:section name="Title">
+</f:section>
+
+<f:section name="Content">
+	<h3>Document: {entity}</h3>
+
+	<e:schema className="TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant">
+		<e:render partial="Table/Layout" arguments="{schema: schema, entities: entity.variants, className: 'TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant', controller: 'DocumentVariant'}" />
+	</e:schema>
+
+</f:section>

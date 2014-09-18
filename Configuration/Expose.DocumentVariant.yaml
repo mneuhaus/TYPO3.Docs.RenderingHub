@@ -1,0 +1,5 @@
+'TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant':
+  listFields: document.type, locale, version
+  searchFields: document.title
+  defaultSortBy: version
+  defaultOrder: DESC
