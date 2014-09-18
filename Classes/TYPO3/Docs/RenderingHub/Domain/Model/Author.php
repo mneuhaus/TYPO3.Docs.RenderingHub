@@ -16,41 +16,48 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Author extends \TYPO3\Party\Domain\Model\Person {
 
-	/**
-	 * Documents from the author
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document>
-	 * @ORM\ManyToMany
-	 */
-	protected $documents;
+    /**
+     * Documents from the author
+     *
+     * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document>
+     * @ORM\ManyToMany(inversedBy="authors")
+     */
+    protected $documents;
 
-	/**
-	 * Get the author's documents
-	 *
-	 * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Category> The category's documents
-	 */
-	public function getDocuments() {
-		return $this->documents;
-	}
+    /**
+     * Add to the documents.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Document $document
+     */
+    public function addDocument($document) {
+        $this->documents->add($document);
+    }
 
-	/**
-	 * Adds a document to this author
-	 *
-	 * @param \TYPO3\Docs\RenderingHub\Domain\Model\Document $document
-	 * @return void
-	 */
-	public function addDocument(\TYPO3\Docs\RenderingHub\Domain\Model\Document $document) {
-		$this->documents->add($document);
-	}
+    /**
+     * Remove from documents.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Document $document
+     */
+    public function removeDocument($document) {
+        $this->documents->remove($document);
+    }
 
-	/**
-	 * Removes a document from this author
-	 *
-	 * @param \TYPO3\Docs\RenderingHub\Domain\Model\Document $document
-	 * @return void
-	 */
-	public function removeDocument(\TYPO3\Docs\RenderingHub\Domain\Model\Document $document) {
-		$this->documents->removeElement($document);
-	}
+    /**
+     * Gets documents.
+     *
+     * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document> $documents
+     */
+    public function getDocuments() {
+        return $this->documents;
+    }
+
+    /**
+     * Sets the documents.
+     *
+     * @param \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document> $documents
+     */
+    public function setDocuments($documents) {
+        $this->documents = $documents;
+    }
+
 }
-?>

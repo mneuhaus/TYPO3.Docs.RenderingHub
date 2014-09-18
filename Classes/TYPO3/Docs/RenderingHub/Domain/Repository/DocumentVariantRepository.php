@@ -14,12 +14,13 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class PackageRepository extends \TYPO3\Flow\Persistence\Repository {
-	public function findPackage($packageKey, $productKey = NULL) {
+class DocumentVariantRepository extends \TYPO3\Flow\Persistence\Repository {
+	public function findDocumentVariant($document, $version, $locale) {
 		$query = $this->createQuery();
 		$query->matching($query->logicalAnd(
-			$query->equals('identifier', $packageKey),
-			$query->equals('parent.identifier', $productKey)
+			$query->equals('document', $document),
+			$query->equals('version', $version),
+			$query->equals('locale', $locale)
 		));
 		return $query->execute()->getFirst();
 	}

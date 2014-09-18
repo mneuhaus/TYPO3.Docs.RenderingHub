@@ -1,5 +1,4 @@
 <?php
-
 namespace TYPO3\Docs\RenderingHub\Domain\Model;
 
 /*                                                                        *
@@ -7,258 +6,189 @@ namespace TYPO3\Docs\RenderingHub\Domain\Model;
  *                                                                        *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * A Package
+ * @Flow\Entity
  */
 class Package {
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=150)
-	 */
-	protected $title;
+    /**
+     * @var string
+     * @ORM\Column(length=150)
+     */
+    protected $title;
 
-	/**
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	protected $abstract;
+    /**
+     * @var \TYPO3\Docs\RenderingHub\Domain\Model\Package
+     * @ORM\ManyToOne(inversedBy="children")
+     */
+    protected $parent;
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=30)
-	 */
-	protected $product;
+    /**
+     * The child categories
+     *
+     * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Package>
+     * @ORM\OneToMany(mappedBy="parent")
+     */
+    protected $children;
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=30)
-	 */
-	protected $locale;
+    /**
+     * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document>
+     * @ORM\OneToMany(mappedBy="package")
+     */
+    protected $documents;
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=30)
-	 */
-	protected $type;
+    /**
+     * @var string
+     */
+    protected $identifier;
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=100)
-	 */
-	protected $packageKey;
+    /**
+     * Constructs this locale object
+     *
+     * @param array $data
+     * @api
+     */
+    public function __construct() {
+        $this->children = new ArrayCollection();
+        $this->documents = new ArrayCollection();
+    }
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=255)
-	 */
-	protected $uri;
+    /**
+     * TODO: Document this Method! ( __toString )
+     */
+    public function __toString() {
+        return $this->title;
+    }
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=255)
-	 */
-	protected $repository;
+    /**
+     * Add to the children.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Package $child
+     */
+    public function addChild($child) {
+        $this->children->add($child);
+    }
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=100)
-	 */
-	protected $version;
+    /**
+     * Remove from children.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Package $child
+     */
+    public function removeChild($child) {
+        $this->children->remove($child);
+    }
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=30)
-	 */
-	protected $repositoryType;
+    /**
+     * Gets children.
+     *
+     * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Package> $children
+     */
+    public function getChildren() {
+        return $this->children;
+    }
 
-	/**
-	 * @var string
-	 * @ORM\Column(length=100)
-	 */
-	protected $repositoryTag;
+    /**
+     * Sets the children.
+     *
+     * @param \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Package> $children
+     */
+    public function setChildren($children) {
+        $this->children = $children;
+    }
 
-	/**
-	 * Constructs this locale object
-	 *
-	 * @param array $data
-	 * @api
-	 */
-	public function __construct($data = array()) {
+    /**
+     * Add to the documents.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Document $document
+     */
+    public function addDocument($document) {
+        $this->documents->add($document);
+    }
 
-		// lower case for every keys avoiding sensitive case problem
-		// when data comes directly from the database
-		$data = array_change_key_case($data, CASE_LOWER);
+    /**
+     * Remove from documents.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Document $document
+     */
+    public function removeDocument($document) {
+        $this->documents->remove($document);
+    }
 
-		$this->title = empty($data['title']) ? '[no title given]' : $data['title'];
-		$this->abstract = empty($data['abstract']) ? '' : $data['abstract'];
-		$this->product = empty($data['product']) ? '' : $data['product'];
-		$this->locale = empty($data['locale']) ? '' : $data['locale'];
-		$this->type = empty($data['type']) ? '' : $data['type'];
-		$this->packageKey = empty($data['packagekey']) ? '' : $data['packagekey'];
-		$this->uri = empty($data['uri']) ? '' : $data['uri'];
-		$this->repository = empty($data['repository']) ? '' : $data['repository'];
-		$this->version = empty($data['version']) ? '' : $data['version'];
-		$this->repositoryType = empty($data['repositorytype']) ? '' : $data['repositorytype'];
-		$this->repositoryTag = empty($data['repositorytag']) ? '' : $data['repositorytag'];
-	}
+    /**
+     * Gets documents.
+     *
+     * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document> $documents
+     */
+    public function getDocuments() {
+        return $this->documents;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getTitle() {
-		return $this->title;
-	}
+    /**
+     * Sets the documents.
+     *
+     * @param \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document> $documents
+     */
+    public function setDocuments($documents) {
+        $this->documents = $documents;
+    }
 
-	/**
-	 * @param string $title
-	 */
-	public function setTitle($title) {
-		$this->title = $title;
-	}
+    /**
+     * Gets identifier.
+     *
+     * @return string $identifier
+     */
+    public function getIdentifier() {
+        return $this->identifier;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getAbstract() {
-		return $this->abstract;
-	}
+    /**
+     * Sets the identifier.
+     *
+     * @param string $identifier
+     */
+    public function setIdentifier($identifier) {
+        $this->identifier = $identifier;
+    }
 
-	/**
-	 * @param string $abstract
-	 */
-	public function setAbstract($abstract) {
-		$this->abstract = $abstract;
-	}
+    /**
+     * Gets parent.
+     *
+     * @return \TYPO3\Docs\RenderingHub\Domain\Model\Package $parent
+     */
+    public function getParent() {
+        return $this->parent;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getProduct() {
-		return $this->product;
-	}
+    /**
+     * Sets the parent.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Package $parent
+     */
+    public function setParent($parent) {
+        $this->parent = $parent;
+    }
 
-	/**
-	 * @param string $product
-	 */
-	public function setProduct($product) {
-		$this->product = $product;
-	}
+    /**
+     * Gets title.
+     *
+     * @return string $title
+     */
+    public function getTitle() {
+        return $this->title;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getLocale() {
-		return $this->locale;
-	}
+    /**
+     * Sets the title.
+     *
+     * @param string $title
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+    }
 
-	/**
-	 * @param string $locale
-	 */
-	public function setLocale($locale) {
-		$this->locale = $locale;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getType() {
-		return $this->type;
-	}
-
-	/**
-	 * @param string $type
-	 */
-	public function setType($type) {
-		$this->type = $type;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getPackageKey() {
-		return $this->packageKey;
-	}
-
-	/**
-	 * @param string $packageKey
-	 */
-	public function setPackageKey($packageKey) {
-		$this->packageKey = $packageKey;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUri() {
-		return $this->uri;
-	}
-
-	/**
-	 * @param string $uri
-	 */
-	public function setUri($uri) {
-		$this->uri = $uri;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRepository() {
-		return $this->repository;
-	}
-
-	/**
-	 * @param string $repository
-	 */
-	public function setRepository($repository) {
-		$this->repository = $repository;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getVersion() {
-		return $this->version;
-	}
-
-	/**
-	 * @param string $version
-	 */
-	public function setVersion($version) {
-		$this->version = $version;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRepositoryType() {
-		return $this->repositoryType;
-	}
-
-	/**
-	 * @param string $repositoryType
-	 */
-	public function setRepositoryType($repositoryType) {
-		$this->repositoryType = $repositoryType;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRepositoryTag() {
-		return $this->repositoryTag;
-	}
-
-	/**
-	 * @param string $repositoryTag
-	 */
-	public function setRepositoryTag($repositoryTag) {
-		$this->repositoryTag = $repositoryTag;
-	}
 }
-
-?>

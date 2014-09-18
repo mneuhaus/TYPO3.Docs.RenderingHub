@@ -16,551 +16,322 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Document {
 
-	/**
-	 * @var string
-	 */
-	const STATUS_RENDER = 'waiting-rendering';
-	const STATUS_OK = 'OK';
-	const STATUS_SYNC = 'waiting-sync';
-	const STATUS_NOT_FOUND = 'documentation-not-found';
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Docs\RenderingHub\Domain\Repository\DocumentRepository
+     */
+    protected $documentRepository;
 
-	/**
-	 * Title of the document
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=150 })
-	 * @ORM\Column(length=255)
-	 */
-	protected $title = '';
+    /**
+     * Title of the document
+     *
+     * @var string
+     * @Flow\Validate(type="NotEmpty")
+     * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=150 })
+     * @ORM\Column(length=255)
+     */
+    protected $title;
 
-	/**
-	 * Abstract
-	 *
-	 * @var string
-	 * @ORM\Column(type="text")
-	 */
-	protected $abstract = '';
+    /**
+     * Abstract
+     *
+     * @var string
+     * @ORM\Column(type="text")
+     */
+    protected $abstract = '';
 
-	/**
-	 * Type of document (manual, book?)
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=100 })
-	 * @ORM\Column(length=100)
-	 */
-	protected $type = '';
+    /**
+     * List of authors
+     *
+     * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Author>
+     * NOTE: do we need a more complete Person model, e.g. including an employer?
+     * @ORM\ManyToMany(inversedBy="documents")
+     */
+    protected $authors;
 
-	/**
-	 * Version number
-	 * Should stick to the conventions of version_compare(), see http://php.net/version_compare
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @ORM\Column(length=30)
-	 */
-	protected $version = '';
+    /**
+     * Categories the document belongs to
+     *
+     * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Category>
+     * @ORM\ManyToMany(inversedBy="")
+     */
+    protected $categories;
 
-	/**
-	 * Status code of the document.
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @ORM\Column(length=50, columnDefinition="ENUM('ok', 'documentation-not-found', 'ok-with-warnings', 'error-parsing', 'waiting-rendering', 'waiting-sync')")
-	 */
-	protected $status = '';
+    /**
+     * @var \TYPO3\Docs\RenderingHub\Domain\Model\Package
+     * @ORM\ManyToOne(inversedBy="documents")
+     */
+    protected $package;
 
-	/**
-	 * Date and time of the rendering
-	 *
-	 * @var \DateTime
-	 * @Flow\Validate(type="NotEmpty")
-	 */
-	protected $generationDate = '';
+    /**
+     * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant>
+     * @ORM\OneToMany(mappedBy="document")
+     */
+    protected $variants;
 
-	/**
-	 * Locale of the document (must be a valid locale)
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @Flow\Validate(type="LocaleIdentifier")
-	 * @ORM\Column(length=50)
-	 */
-	protected $locale = '';
+    /**
+     * @var string
+     */
+    protected $type;
 
-	/**
-	 * Product to which the documentation belongs, e.g. "TYPO3", "Flow"
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=20 })
-	 * @ORM\Column(length=20)
-	 */
-	protected $product = '';
+    /**
+     * @var string
+     */
+    protected $source;
 
-	/**
-	 * Package key to which the documentation belongs
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @Flow\Validate(type="StringLength", options={ "minimum"=3, "maximum"=100 })
-	 * @ORM\Column(length=100)
-	 */
-	protected $packageKey = '';
+    public function __toString() {
+        return $this->title;
+    }
 
-	/**
-	 * URI at which the document is available
-	 *
-	 * @var string
-	 * @Flow\Validate(type="NotEmpty")
-	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
-	 * @ORM\Column(length=255, unique=true)
-	 */
-	protected $uri = '';
+    /**
+     * Gets abstract.
+     *
+     * @return string $abstract
+     */
+    public function getAbstract() {
+        return $this->abstract;
+    }
 
-	/**
-	 * URI at which the document is also available
-	 *
-	 * @var string
-	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
-	 * @ORM\Column(length=255)
-	 */
-	protected $uriAlias = '';
+    /**
+     * Sets the abstract.
+     *
+     * @param string $abstract
+     */
+    public function setAbstract($abstract) {
+        $this->abstract = $abstract;
+    }
 
-	/**
-	 * The source URI where the package comes from.
-	 *
-	 * @var string
-	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
-	 * @ORM\Column(length=255)
-	 */
-	protected $repository = '';
+    /**
+     * Add to the authors.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Author $author
+     */
+    public function addAuthor($author) {
+        $this->authors->add($author);
+    }
 
-	/**
-	 * The tag name of a repository for Git Document
-	 *
-	 * @var string
-	 * @Flow\Validate(type="StringLength", options={ "maximum"=255 })
-	 * @ORM\Column(length=255)
-	 */
-	protected $repositoryTag = '';
+    /**
+     * Remove from authors.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Author $author
+     */
+    public function removeAuthor($author) {
+        $this->authors->remove($author);
+    }
 
-	/**
-	 * Repository type of the document (ter, git)
-	 *
-	 * @var string
-	 * @ORM\Column(length=100)
-	 */
-	protected $repositoryType = '';
+    /**
+     * Gets authors.
+     *
+     * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Author> $authors
+     */
+    public function getAuthors() {
+        return $this->authors;
+    }
 
-	/**
-	 * Get package remote file
-	 *
-	 * @var string
-	 * @Flow\Validate(type="StringLength", options={ "maximum"=150 })
-	 * @ORM\Column(length=150)
-	 */
-	protected $packageFile = '';
+    /**
+     * Sets the authors.
+     *
+     * @param \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Author> $authors
+     */
+    public function setAuthors($authors) {
+        $this->authors = $authors;
+    }
 
-	/**
-	 * List of authors
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Author>
-	 * NOTE: do we need a more complete Person model, e.g. including an employer?
-	 * @ORM\ManyToMany
-	 */
-	protected $authors;
+    /**
+     * Gets categories.
+     *
+     * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Category> $categories
+     */
+    public function getCategories() {
+        return $this->categories;
+    }
 
-	/**
-	 * Categories the document belongs to
-	 *
-	 * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Category>
-	 * @ORM\ManyToMany
-	 */
-	protected $categories;
+    /**
+     * Sets the categories.
+     *
+     * @param \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Category> $categories
+     */
+    public function setCategories($categories) {
+        $this->categories = $categories;
+    }
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\RenderingHub\Domain\Repository\DocumentRepository
-	 */
-	protected $documentRepository;
+    /**
+     * Add to the categories.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Category $category
+     */
+    public function addCategory($category) {
+        $this->categories->add($category);
+    }
 
-	/**
-	 * Sets the abstract
-	 *
-	 * @param string $abstract
-	 */
-	public function setAbstract($abstract) {
-		$this->abstract = $abstract;
-	}
+    /**
+     * Remove from categories.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Category $category
+     */
+    public function removeCategory($category) {
+        $this->categories->remove($category);
+    }
 
-	/**
-	 * Gets the abstract
-	 *
-	 * @return string
-	 */
-	public function getAbstract() {
-		return $this->abstract;
-	}
+    /**
+     * @return boolean
+     */
+    public function getIsOk() {
+        return $this->getStatus() === self::STATUS_OK;
+    }
 
-	/**
-	 * Sets the generation date and time
-	 *
-	 * @param \DateTime $generationDate
-	 */
-	public function setGenerationDate($generationDate) {
-		$this->generationDate = $generationDate;
-	}
+    /**
+     * @return boolean
+     */
+    public function getIsProcessing() {
+        return $this->getStatus() === self::STATUS_RENDER || $this->getStatus() === self::STATUS_SYNC;
+    }
 
-	/**
-	 * Gets the generation date and time
-	 *
-	 * @return \DateTime
-	 */
-	public function getGenerationDate() {
-		return $this->generationDate;
-	}
+    /**
+     * Gets the locale
+     *
+     * @return string
+     */
+    public function getLocaleObject() {
+        return new \TYPO3\Flow\I18n\Locale($this->locale);
+    }
 
-	/**
-	 * Sets the locale
-	 *
-	 * @param string $locale
-	 */
-	public function setLocale($locale) {
-		$this->locale = $locale;
-	}
+    /**
+     * Gets package.
+     *
+     * @return \TYPO3\Docs\RenderingHub\Domain\Model\Package $package
+     */
+    public function getPackage() {
+        return $this->package;
+    }
 
-	/**
-	 * Gets the locale
-	 *
-	 * @return string
-	 */
-	public function getLocale() {
-		return $this->locale;
-	}
+    /**
+     * Sets the package.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\Package $package
+     */
+    public function setPackage($package) {
+        $this->package = $package;
+    }
 
-	/**
-	 * Gets the locale
-	 *
-	 * @return string
-	 */
-	public function getLocaleObject() {
-		return new \TYPO3\Flow\I18n\Locale($this->locale);
-	}
+    /**
+     * Gets source.
+     *
+     * @return string $source
+     */
+    public function getSource() {
+        return $this->source;
+    }
 
-	/**
-	 * Sets the package key
-	 *
-	 * @param string $packageKey
-	 */
-	public function setPackageKey($packageKey) {
-		$this->packageKey = $packageKey;
-	}
+    /**
+     * Sets the source.
+     *
+     * @param string $source
+     */
+    public function setSource($source) {
+        $this->source = $source;
+    }
 
-	/**
-	 * Gets the package key
-	 *
-	 * @return string
-	 */
-	public function getPackageKey() {
-		return $this->packageKey;
-	}
+    /**
+     * Gets title.
+     *
+     * @return string $title
+     */
+    public function getTitle() {
+        return $this->title;
+    }
 
-	/**
-	 * Sets the product name
-	 *
-	 * @param string $product
-	 */
-	public function setProduct($product) {
-		$this->product = $product;
-	}
+    /**
+     * Sets the title.
+     *
+     * @param string $title
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+    }
 
-	/**
-	 * Gets the product name
-	 *
-	 * @return string
-	 */
-	public function getProduct() {
-		return $this->product;
-	}
+    /**
+     * Gets type.
+     *
+     * @return string $type
+     */
+    public function getType() {
+        return $this->type;
+    }
 
-	/**
-	 * Sets the title
-	 *
-	 * @param string $title
-	 */
-	public function setTitle($title) {
-		$this->title = $title;
-	}
+    /**
+     * Sets the type.
+     *
+     * @param string $type
+     */
+    public function setType($type) {
+        $this->type = $type;
+    }
 
-	/**
-	 * Gets the title
-	 *
-	 * @return string
-	 */
-	public function getTitle() {
-		return $this->title;
-	}
+    /**
+     * Gets the URI Object
+     *
+     * @return string
+     */
+    public function getUriObject() {
+        return new \TYPO3\Flow\Http\Uri($this->uri);
+    }
 
-	/**
-	 * Sets the type
-	 *
-	 * @param string $type
-	 */
-	public function setType($type) {
-		$this->type = $type;
-	}
+    /**
+     * Add to the variants.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant $variant
+     */
+    public function addVariant($variant) {
+        $this->variants->add($variant);
+    }
 
-	/**
-	 * Gets the type
-	 *
-	 * @return string
-	 */
-	public function getType() {
-		return $this->type;
-	}
+    /**
+     * Remove from variants.
+     *
+     * @param \TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant $variant
+     */
+    public function removeVariant($variant) {
+        $this->variants->remove($variant);
+    }
 
-	/**
-	 * Set the URI
-	 *
-	 * @param string $uri A URI
-	 */
-	public function setUri($uri) {
-		$this->uri = $uri;
-	}
+    /**
+     * Gets variants.
+     *
+     * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant> $variants
+     */
+    public function getVariants() {
+        return $this->variants;
+    }
 
-	/**
-	 * Gets the URI
-	 *
-	 * @return string
-	 */
-	public function getUri() {
-		return $this->uri;
-	}
+    /**
+     * Sets the variants.
+     *
+     * @param \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant> $variants
+     */
+    public function setVariants($variants) {
+        $this->variants = $variants;
+    }
 
-	/**
-	 * Gets the URI Object
-	 *
-	 * @return string
-	 */
-	public function getUriObject() {
-		return new \TYPO3\Flow\Http\Uri($this->uri);
-	}
+    /**
+     * @return \TYPO3\Docs\RenderingHub\Domain\Model\Package
+     */
+    public function toPackage() {
+        $package = new \TYPO3\Docs\RenderingHub\Domain\Model\Package();
+        $ref = new \ReflectionObject($package);
+        $properties = $ref->getProperties();
+        foreach ($properties as $property) {    $property = $property->getName();
+            $setter = 'set' . ucfirst($property);
+            $getter = 'get' . ucfirst($property);
+            $value = call_user_func(array($this,
+            	$getter
+            ));
+            call_user_func_array(array($package,
+            	$setter
+            ), array($value
+            ));
+        }
+        return $package;
+    }
 
-	/**
-	 * Sets the version number
-	 *
-	 * @param string $version
-	 */
-	public function setVersion($version) {
-		$this->version = $version;
-	}
-
-	/**
-	 * Gets the version number
-	 *
-	 * @return string
-	 */
-	public function getVersion() {
-		return $this->version;
-	}
-
-	/**
-	 * Get the document's authors
-	 *
-	 * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Author> The document's authors
-	 */
-	public function getAuthors() {
-		return $this->authors;
-	}
-
-	/**
-	 * Adds an author to this document
-	 *
-	 * @param \TYPO3\Docs\RenderingHub\Domain\Model\Author $author
-	 * @return void
-	 */
-	public function addAuthor(\TYPO3\Docs\RenderingHub\Domain\Model\Author $author) {
-		$this->authors->add($author);
-	}
-
-	/**
-	 * Removes an author from this document
-	 *
-	 * @param \TYPO3\Docs\RenderingHub\Domain\Model\Author $author
-	 * @return void
-	 */
-	public function removeAuthor(\TYPO3\Docs\RenderingHub\Domain\Model\Author $author) {
-		$this->authors->removeElement($author);
-	}
-
-	/**
-	 * Get the document's categories
-	 *
-	 * @return \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Category> The document's categories
-	 */
-	public function getCategories() {
-		return $this->categories;
-	}
-
-	/**
-	 * Adds a category to this document
-	 *
-	 * @param \TYPO3\Docs\RenderingHub\Domain\Model\Category $category
-	 * @return void
-	 */
-	public function addCategory(\TYPO3\Docs\RenderingHub\Domain\Model\Category $category) {
-		$this->categories->add($category);
-	}
-
-	/**
-	 * Removes a category from this document
-	 *
-	 * @param \TYPO3\Docs\RenderingHub\Domain\Model\Category $category
-	 * @return void
-	 */
-	public function removeCategory(\TYPO3\Docs\RenderingHub\Domain\Model\Category $category) {
-		$this->categories->removeElement($category);
-	}
-
-	/**
-	 * Get the status from the document
-	 *
-	 * @return string
-	 */
-	public function getStatus() {
-		return $this->status;
-	}
-
-	/**
-	 * Set a status to the document
-	 *
-	 * @param string $status
-	 */
-	public function setStatus($status) {
-		$this->status = $status;
-	}
-
-	/**
-	 * Get the repository type of the document
-	 *
-	 * @return string
-	 */
-	public function getRepositoryType() {
-		return $this->repositoryType;
-	}
-
-	/**
-	 * Set the repository type
-	 *
-	 * @param string $repositoryType
-	 */
-	public function setRepositoryType($repositoryType) {
-		$this->repositoryType = $repositoryType;
-	}
-
-	/**
-	 * Get the source of the document
-	 *
-	 * @return string
-	 */
-	public function getRepository() {
-		return $this->repository;
-	}
-
-	/**
-	 * Set the source of the document
-	 *
-	 * @param string $repository
-	 */
-	public function setRepository($repository) {
-		$this->repository = $repository;
-	}
-
-	/**
-	 * Get the repository tag
-	 *
-	 * @return string
-	 */
-	public function getRepositoryTag() {
-		return $this->repositoryTag;
-	}
-
-	/**
-	 * Set the repository tag
-	 *
-	 * @param string $repositoryTag
-	 */
-	public function setRepositoryTag($repositoryTag) {
-		$this->repositoryTag = $repositoryTag;
-	}
-
-	/**
-	 * Get package remote file
-	 *
-	 * @return string
-	 */
-	public function getPackageFile() {
-		return $this->packageFile;
-	}
-
-	/**
-	 * Set package remote file
-	 *
-	 * @param string $packageFile
-	 */
-	public function setPackageFile($packageFile) {
-		$this->packageFile = $packageFile;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getUriAlias() {
-		return $this->uriAlias;
-	}
-
-	/**
-	 * @param string $uriAlias
-	 */
-	public function setUriAlias($uriAlias) {
-		$this->uriAlias = $uriAlias;
-	}
-
-	/**
-	 * @return \TYPO3\Docs\RenderingHub\Domain\Model\Package
-	 */
-	public function toPackage() {
-		$package = new \TYPO3\Docs\RenderingHub\Domain\Model\Package();
-
-		$ref = new \ReflectionObject($package);
-		$properties = $ref->getProperties();
-		foreach ($properties as $property) {
-			$property = $property->getName();
-			$setter = 'set' . ucfirst($property);
-			$getter = 'get' . ucfirst($property);
-
-			$value = call_user_func(array($this, $getter));
-			call_user_func_array(array($package, $setter), array($value));
-		}
-		return $package;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function getIsOk() {
-		return $this->getStatus() === self::STATUS_OK;
-	}
-
-	/**
-	 * @return boolean
-	 */
-	public function getIsProcessing() {
-		return $this->getStatus() === self::STATUS_RENDER ||
-			$this->getStatus() === self::STATUS_SYNC;
-	}
 }
-
-?>
