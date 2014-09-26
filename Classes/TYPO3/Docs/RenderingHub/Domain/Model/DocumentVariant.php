@@ -33,6 +33,7 @@ class DocumentVariant {
     /**
      * @var \TYPO3\Docs\RenderingHub\Domain\Model\Document
      * @ORM\ManyToOne(inversedBy="variants")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $document;
 

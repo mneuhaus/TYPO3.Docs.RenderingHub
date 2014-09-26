@@ -25,6 +25,7 @@ class Package {
     /**
      * @var \TYPO3\Docs\RenderingHub\Domain\Model\Package
      * @ORM\ManyToOne(inversedBy="children")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $parent;
 
@@ -33,12 +34,14 @@ class Package {
      *
      * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Package>
      * @ORM\OneToMany(mappedBy="parent")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $children;
 
     /**
      * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Document>
      * @ORM\OneToMany(mappedBy="package")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $documents;
 
@@ -46,6 +49,11 @@ class Package {
      * @var string
      */
     protected $identifier;
+
+    /**
+     * @var string
+     */
+    protected $source;
 
     /**
      * Constructs this locale object
@@ -189,6 +197,20 @@ class Package {
      */
     public function setTitle($title) {
         $this->title = $title;
+    }
+
+    /**
+     * @param string $source
+     */
+    public function setSource($source) {
+        $this->source = $source;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource() {
+        return $this->source;
     }
 
 }

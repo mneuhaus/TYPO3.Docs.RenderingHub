@@ -6,30 +6,22 @@ namespace TYPO3\Docs\RenderingHub\Controller;
  *                                                                        *
  *                                                                        */
 
+use Flowpack\Expose\Controller\CrudController;
+use TYPO3\Docs\RenderingHub\Domain\Model\User;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Error\Message;
+use TYPO3\Flow\Security\AccountFactory;
 
 /**
  * Standard controller for the TYPO3.Docs package
  *
  * @Flow\Scope("singleton")
  */
-class StandardController extends \TYPO3\Flow\Mvc\Controller\ActionController {
-
+class ComboController extends CrudController {
 	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Docs\RenderingHub\Domain\Repository\DocumentRepository
+	 * @var string
 	 */
-	protected $documentRepository;
-
-	/**
-	 * Index action
-	 *
-	 * @return void
-	 */
-	public function indexAction() {
-		// $this->view->assign('documents', $this->documentRepository->findForHomePage());
-	}
-
+	protected $entity = 'TYPO3\Docs\RenderingHub\Domain\Model\Combo';
 }
 
 ?>

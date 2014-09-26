@@ -1,0 +1,13 @@
+{namespace e=Flowpack\Expose\ViewHelpers}
+<f:if condition="{schema.listFields}">
+	<tr>
+		<td class="batch">
+			<input type="checkbox" class="select-all" />
+		</td>
+		<f:for each="{schema.listFields}" as="field">
+			<th>
+				<e:wrap name="field" arguments="{field: field}"><i class="fa"></i> {field -> e:format.humanizeCamelCase()}</e:wrap>
+			</th>
+		</f:for>
+	</tr>
+</f:if>

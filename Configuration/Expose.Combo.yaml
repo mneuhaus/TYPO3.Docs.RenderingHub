@@ -1,0 +1,5 @@
+'TYPO3\Docs\RenderingHub\Domain\Model\Combo':
+  listFields: name, status
+  searchFields: name
+  defaultSortBy: name
+  defaultOrder: ASC

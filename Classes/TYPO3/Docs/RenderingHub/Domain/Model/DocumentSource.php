@@ -16,6 +16,7 @@ class DocumentSource {
     /**
      * @var \TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant
      * @ORM\ManyToOne(inversedBy="sources")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $variant;
 

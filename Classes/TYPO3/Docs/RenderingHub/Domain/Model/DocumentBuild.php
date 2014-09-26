@@ -16,6 +16,7 @@ class DocumentBuild {
     /**
      * @var \TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant
      * @ORM\ManyToOne(inversedBy="builds")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $variant;
 

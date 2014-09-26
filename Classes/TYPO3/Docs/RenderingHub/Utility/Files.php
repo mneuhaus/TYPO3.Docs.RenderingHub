@@ -14,7 +14,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("singleton")
  */
-class Files  {
+class Files  extends \TYPO3\Flow\Utility\Files {
 
 	/**
 	 * Return a unix time of the last modification

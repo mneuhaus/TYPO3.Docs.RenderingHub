@@ -10,18 +10,10 @@ use TYPO3\Docs\RenderingHub\Domain\Model\Document;
 use TYPO3\Flow\Annotations as Flow;
 
 /**
- * A repository for Documentations
  *
  * @Flow\Scope("singleton")
  */
-class DocumentRepository extends \TYPO3\Flow\Persistence\Repository {
-	public function findDocument($package, $type) {
-		$query = $this->createQuery();
-		$query->matching($query->logicalAnd(
-			$query->equals('package', $package),
-			$query->equals('type', $type)
-		));
-		return $query->execute()->getFirst();
-	}
+class ComboRepository extends \TYPO3\Flow\Persistence\Repository {
+
 }
 ?>

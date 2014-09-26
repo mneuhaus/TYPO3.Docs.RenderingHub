@@ -46,6 +46,7 @@ class Document {
      * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\Author>
      * NOTE: do we need a more complete Person model, e.g. including an employer?
      * @ORM\ManyToMany(inversedBy="documents")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $authors;
 
@@ -60,12 +61,14 @@ class Document {
     /**
      * @var \TYPO3\Docs\RenderingHub\Domain\Model\Package
      * @ORM\ManyToOne(inversedBy="documents")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $package;
 
     /**
      * @var \Doctrine\Common\Collections\Collection<\TYPO3\Docs\RenderingHub\Domain\Model\DocumentVariant>
      * @ORM\OneToMany(mappedBy="document")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     protected $variants;
 

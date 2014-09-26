@@ -62,6 +62,9 @@ TYPO3:
   Jobqueue:
     Common:
       queues:
+        org.typo3.docs.combo:
+          className: 'TYPO3\Jobqueue\Doctrine\Queue\DoctrineQueue'
+
         org.typo3.docs.build:
           className: 'TYPO3\Jobqueue\Doctrine\Queue\DoctrineQueue'
 
